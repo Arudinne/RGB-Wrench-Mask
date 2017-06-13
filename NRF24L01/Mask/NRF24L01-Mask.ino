@@ -2,7 +2,7 @@
  *  
  *  by Brandon C. Allen
  *  
- *   *  Hardware Used:
+ *  Hardware Used:
  *  Adafruit Feather M0 Proto
  *  https://www.adafruit.com/product/2772
  *  Eight Adafruit DotStar High Density 8x8 Grid - 64 RGB LED Pixel Matrices
