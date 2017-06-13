@@ -9,7 +9,11 @@
  *  https://www.adafruit.com/product/1787
  *  
  *  by Brandon C. Allen 
- *  
+ *
+ * Based on the following Sketches:
+ * --------------------------------
+ * ESP8266 Web Server with Arduino IDE
+ * http://randomnerdtutorials.com/esp8266-web-server-with-arduino-ide/
 */
 
 /* Facial Expressions List
