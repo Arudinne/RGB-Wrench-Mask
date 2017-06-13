@@ -2,8 +2,11 @@
  *  
  *  Hardware Used:
  *  Adafruit Feather HUZZAH with ESP8266 WiFi
- *  Adafruit DotStar High Density 8x8 Grid - 64 RGB LED Pixel Matrix
+ *  https://www.adafruit.com/product/2821
+ *  Eight Adafruit DotStar High Density 8x8 Grid - 64 RGB LED Pixel Matrices
+ *  https://www.adafruit.com/product/3444
  *  74AHCT125 - Quad Level-Shifter
+ *  https://www.adafruit.com/product/1787
  *  
  *  by Brandon C. Allen 
  *  
