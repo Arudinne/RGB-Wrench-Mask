@@ -26,3 +26,5 @@ Metal Spikes: https://www.amazon.com/gp/product/B0199B32TG
 Black Mesh: https://www.etsy.com/listing/267597727/ 
 
 Foam Window stripping (used for comfort since the mask I bought did not have any): https://www.amazon.com/gp/product/B0000CBIFD
+
+Serpac H65-AC-B enclosure: http://www.mouser.com/Search/ProductDetail.aspx?R=H-65-AC-B
