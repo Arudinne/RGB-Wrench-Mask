@@ -14,6 +14,8 @@ NRF24L01 Transciever: https://www.amazon.com/gp/product/B016PP62QO
 
 5V UBEC: https://www.adafruit.com/product/1385
 
+Power Switch: https://www.amazon.com/gp/product/B008DFYT0Q
+
 Serpac H65-AC-B enclosure: http://www.mouser.com/Search/ProductDetail.aspx?R=H-65-AC-B
 
 -----
