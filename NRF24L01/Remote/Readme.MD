@@ -12,6 +12,8 @@ NRF24L01 Transciever: https://www.amazon.com/gp/product/B016PP62QO
 
 1200 mAh battery: hhttps://www.adafruit.com/product/258
 
-Hammond 1553DBAT+PCB: https://www.amazon.com/gp/product/B0040Z1H3K/
+Power Switch: https://www.amazon.com/gp/product/B008DFYT0Q
+
+Hammond 1553DBAT+PCB: https://www.amazon.com/gp/product/B0040Z1H3K
 
 Belt Clip: https://www.amazon.com/gp/product/B00DWI8TCI
