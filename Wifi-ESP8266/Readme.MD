@@ -1,29 +1,11 @@
-Mask Hardware List
+Libraries Used:
 
-Electronics:
+Arduino SPI: https://github.com/codebendercc/arduino-library-files/tree/master/libraries/SPI
 
-Feather HUZZAH: https://www.adafruit.com/product/2821
+Ardunio ESP8266 Web Server: https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer
 
-Quad Level Shifter: https://www.adafruit.com/product/1787
+Arduino ESP8266 Wifi: https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WiFi
 
-LED Matricies (8): https://www.adafruit.com/product/3444
+Arudino ESP8266 mDNS: https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266mDNS
 
-NRF24L01 Transciever: https://www.amazon.com/gp/product/B016PP62QO
-
-2000 mAh battery: https://www.adafruit.com/product/2011
-
-5V UBEC: https://www.adafruit.com/product/1385
-
-------------------------------------------
-
-Non Electronic components:
-
-Mask: https://www.amazon.com/gp/product/B06XF2KR7P/ https://www.amazon.com/gp/product/B00NQDV40I/
-
-Metal Spikes: https://www.amazon.com/gp/product/B0199B32TG
-
-Black Mesh: https://www.etsy.com/listing/267597727/
-
-Foam Window stripping (used for comfort since the mask I bought did not have any): https://www.amazon.com/gp/product/B0000CBIFD
-
-Serpac H65-AC-B enclosure: http://www.mouser.com/Search/ProductDetail.aspx?R=H-65-AC-B
+Adafruit DotStar: https://github.com/adafruit/Adafruit_DotStar/blob/master/Adafruit_DotStar.h
