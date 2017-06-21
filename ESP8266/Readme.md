@@ -1,4 +1,4 @@
-Libraries Used:
+Libraries used:
 
 Arduino SPI: https://github.com/codebendercc/arduino-library-files/tree/master/libraries/SPI
 
