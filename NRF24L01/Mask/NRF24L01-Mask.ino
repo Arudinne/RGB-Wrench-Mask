@@ -291,7 +291,7 @@ void loop()
     { 
     FaceMode='N';  
     }
-    else if(textstring == "O") // Draw Face0223
+    else if(textstring == "O") // Draw Face023
     { 
     FaceMode='O';  
     }
