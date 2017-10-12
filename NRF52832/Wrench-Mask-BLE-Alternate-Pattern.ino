@@ -1,9 +1,9 @@
-/* Wrench Mask - WiFi Version (ESP32)
+/*  Wrench Mask - BLE Version (NRF52832)
  *  
  *  Hardware Used:
- *  Adafruit Feather HUZZAH with ESP8266 WiFi
+ *  Adafruit Feather NRF52
  *  Adafruit DotStar High Density 8x8 Grid - 64 RGB LED Pixel Matrix
- *  74AHCT125 - Quad Level-Shifter
+ *  TXB0104 Bi-Directional Level Shifter
  *  
  *  by Brandon C. Allen 
  *  
