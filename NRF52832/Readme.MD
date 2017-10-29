@@ -4,13 +4,15 @@ Electronics:
 
 Feather nRF52 Bluefruit: https://www.adafruit.com/product/3406
 
-Quad Level Shifter: https://www.adafruit.com/product/1787
+Quad Level Shifter: https://www.adafruit.com/product/1875
 
 LED Matricies (8): https://www.adafruit.com/product/3444
 
-2000 mAh battery: https://www.adafruit.com/product/2011
+6600 mAh battery: https://www.adafruit.com/product/353
 
-5V UBEC: https://www.adafruit.com/product/1385
+PowerBoost 1000: https://www.adafruit.com/product/2030
+
+Capactitors: https://www.mouser.com/Search/ProductDetail.aspx?R=UVZ1C221MED
 
 ------------------------------------------
 
@@ -24,4 +26,6 @@ Black Mesh: https://www.etsy.com/listing/267597727/
 
 Foam Window stripping (used for comfort since the mask I bought did not have any): https://www.amazon.com/gp/product/B0000CBIFD
 
-Serpac H65-AC-B enclosure: http://www.mouser.com/Search/ProductDetail.aspx?R=H-65-AC-B
+Battery Enclosure: https://www.amazon.com/gp/product/B00O9Y4IMY
+
+MCU Enclosure: https://www.mouser.com/Search/ProductDetail.aspx?R=KIT-1593L-BK 
