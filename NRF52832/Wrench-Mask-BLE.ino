@@ -62,10 +62,10 @@ Adafruit_DotStar righteye = Adafruit_DotStar(NUMPIXELS, DATAPINR, CLOCKPINR, DOT
 char FaceMode = 1;  
 
 // Define color parameters
-uint32_t colorRed = 0x040000;
-uint32_t colorGreen = 0x000400;
-uint32_t colorBlue = 0x000004;
-uint32_t colorWhite = 0x040404;
+uint32_t colorRed = 0xFF0000;
+uint32_t colorGreen = 0x00FF00;
+uint32_t colorBlue = 0x0000FF;
+uint32_t colorWhite = 0xFFFFFF;
 
 // Define initial color
 uint32_t color = colorWhite;
@@ -76,6 +76,7 @@ unsigned long previousMillis = 0;
 int ledState = 0; //
 long OnTime = 6000; // milliseconds of on-time
 long OffTime = 50; // milliseconds of off-time
+byte EyeBrightness = 004;
 
 // Initial boolean variables for face status checks when switching faces
 // Face001
@@ -152,6 +153,8 @@ void setup()
 {
   lefteye.begin();
   righteye.begin();
+  lefteye.setBrightness(EyeBrightness);
+  righteye.setBrightness(EyeBrightness);
   lefteye.show(); 
   righteye.show();
   
@@ -307,6 +310,12 @@ void loop()
     else if(ch == 0x4E){
       FaceMode='N';
       Serial.println("Umbrella LEDs ON");
+    }
+    else if(ch == 0x2B){
+      IncrementBrightness();
+    }
+    else if(ch == 0x2D){
+      DecrementBrightness();
     }
   }
 
@@ -1241,6 +1250,39 @@ void FaceRunningCheckClearFunction()
   Face023RunningCheck = false; // Face023 
   }
 
+void IncrementBrightness()
+{
+  if (EyeBrightness < 10){
+    EyeBrightness += 1;
+    Serial.println("Incrementing Brightness by 1");
+    Serial.print("Brightness:");
+    Serial.println(EyeBrightness);
+    lefteye.setBrightness(EyeBrightness);
+    righteye.setBrightness(EyeBrightness);
+    lefteye.show(); 
+    righteye.show();
+  }
+  else if(EyeBrightness = 10){
+    Serial.println("Brightness already at maximum");
+  }  
+}
+void DecrementBrightness()
+{
+  if (EyeBrightness > 1){
+    EyeBrightness -= 1;
+    Serial.println("Decrementing Brightness by 1");
+    Serial.print("Brightness:");
+    Serial.println(EyeBrightness);
+    lefteye.setBrightness(EyeBrightness);
+    righteye.setBrightness(EyeBrightness);
+    lefteye.show(); 
+    righteye.show();
+  }
+  else if(EyeBrightness = 1){
+    Serial.println("Brightness already at minimum");
+  }  
+}
+
 void BlinkFunction(String FaceVariable)
 {
     Serial.print("Face");
@@ -1251,8 +1293,8 @@ void BlinkFunction(String FaceVariable)
     lefteye.show(); 
     righteye.show();
     delay(10);
-    lefteye.setBrightness(255);
-    righteye.setBrightness(255);
+    lefteye.setBrightness(EyeBrightness);
+    righteye.setBrightness(EyeBrightness);
     lefteye.show(); 
     righteye.show();
 }
