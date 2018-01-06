@@ -2,20 +2,23 @@
  *  
  *  Hardware Used:
  *  Adafruit Feather NRF52
- *  Pimoroni Unicorn Hat HD
+ *  Pimoroni Unicorn Hat HD x2
  *  
  *  by Brandon C. Allen 
  *  
- *  Based on the bleuart example from AdaFruit:
+ *  BLE Functions based on the bleuart example from AdaFruit:
  *  https://github.com/adafruit/Adafruit_nRF52_Arduino/blob/master/libraries/Bluefruit52Lib/examples/Peripheral/bleuart/bleuart.ino
- *  
+ *  Additional portions of the code are based on the matrixdraw example from gguuss's branch of the AdaFruit NeoPixel library:
+ *  https://github.com/gguuss/Adafruit_NeoPixel/blob/master/examples/matrixdraw/matrixdraw.ino
+ *  My Library for controlling the Unicorn Hat HD with the Arduino can found here:
+ *  https://github.com/Arudinne/Unicorn-Hat-HD-Arduino
 */
 
-// Byte Masks for facial expressions
+// Byte masks for facial expressions
 
 #define ROW_SIZE 16
 
-//  X_X - face001
+//  X_X - Face001
 
 byte face001_Left [][ROW_SIZE] = {
   {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -979,19 +982,20 @@ byte face024_White [][ROW_SIZE] = {
 #include <SPI.h>
 #include <Unicorn_Hat_HD.h>
 
-const int slaveSelectPinA = 7;
-const int slaveSelectPinB = 27;
-
 // BLE Service
 BLEDis  bledis;
 BLEUart bleuart;
 BLEBas  blebas;
 
 // Define the matrix CS pins
-Unicorn_Hat_HD lefteye = Unicorn_Hat_HD(slaveSelectPinA);
-Unicorn_Hat_HD righteye = Unicorn_Hat_HD(slaveSelectPinB);
+const int matrixAChipSelectPin = 7;
+const int matrixBChipSelectPin = 27;
 
-// Define color parameters
+// Define the matrices
+Unicorn_Hat_HD lefteye = Unicorn_Hat_HD(matrixAChipSelectPin);
+Unicorn_Hat_HD righteye = Unicorn_Hat_HD(matrixBChipSelectPin);
+
+// Define preset color variables
 uint32_t colorRed = 0xFF0000;
 uint32_t colorGreen = 0x00FF00;
 uint32_t colorBlue = 0x0000FF;
@@ -1000,18 +1004,16 @@ uint32_t colorWhite = 0xFFFFFF;
 // Define initial color
 uint32_t color = colorWhite;
 
-// Define Variables for blinking the LEDs
+// Define variables for blinking the LEDs
 unsigned long currentMillis = 0;
 unsigned long previousMillis = 0;
 int ledState = 0; //
 long OnTime = 6000; // milliseconds of on-time
 long OffTime = 70; // milliseconds of off-time
-byte EyeBrightness = 50;
 
-// Initialize boolean variables for face status checks when switching faces
+// Set default brightness level
+byte eyeBrightness = 50;
 
-//Startup
-bool startupCheck = false;
 bool drawGivenMask(int row, int col, byte mask[][ROW_SIZE])
 {
   col = col % ROW_SIZE;
@@ -1025,8 +1027,8 @@ void setup()
 {
   lefteye.begin();
   righteye.begin();
-  lefteye.setBrightness(EyeBrightness);
-  righteye.setBrightness(EyeBrightness);
+  lefteye.setBrightness(eyeBrightness);
+  righteye.setBrightness(eyeBrightness);
   lefteye.show(); 
   righteye.show();
   
@@ -1036,53 +1038,32 @@ void setup()
   Serial.println("|| Opening Serial port for Debugging ||");
   Serial.println("=======================================");
 
-  //Configure BLE
+  // Configure BLE
   Bluefruit.begin();
-  // Set Max power. Accepted values are: -40, -30, -20, -16, -12, -8, -4, 0, 4
   Bluefruit.setTxPower(4);
   Bluefruit.setName("Wrench Mask");
   Bluefruit.setConnectCallback(connect_callback);
   Bluefruit.setDisconnectCallback(disconnect_callback);
-
-  // Configure and Start Device Information Service
   bledis.setManufacturer("Adafruit Industries");
   bledis.setModel("Bluefruit Feather52");
   bledis.begin();
-
-  // Configure and Start BLE Uart Service
   bleuart.begin();
-
-  // Start BLE Battery Service
   blebas.begin();
   blebas.write(100);
 
   // Set up and start advertising
   startAdv();
-  Face001();
+
+  // Draw Initial Face Pattern
+  face001();
 }
 
 void startAdv(void)
 {
-  // Advertising packet
   Bluefruit.Advertising.addFlags(BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE);
   Bluefruit.Advertising.addTxPower();
-
-  // Include bleuart 128-bit uuid
   Bluefruit.Advertising.addService(bleuart);
-
-  // Secondary Scan Response packet (optional)
-  // Since there is no room for 'Name' in Advertising packet
   Bluefruit.ScanResponse.addName();
-  
-  /* Start Advertising
-   * - Enable auto advertising if disconnected
-   * - Interval:  fast mode = 20 ms, slow mode = 152.5 ms
-   * - Timeout for fast mode is 30 seconds
-   * - Start(timeout) with timeout = 0 will advertise forever (until connected)
-   * 
-   * For recommended advertising interval
-   * https://developer.apple.com/library/content/qa/qa1931/_index.html   
-   */
   Bluefruit.Advertising.restartOnDisconnect(true);
   Bluefruit.Advertising.setInterval(32, 244);    // in unit of 0.625 ms
   Bluefruit.Advertising.setFastTimeout(30);      // number of seconds in fast mode
@@ -1101,39 +1082,39 @@ void loop()
     Serial.println("");
     switch (ch) 
    {
-    case 0x2B: IncrementBrightness(); break;
-    case 0x2D: DecrementBrightness(); break;
-    case 0x30: Face010(); break; // Draw Face010
-    case 0x31: Face001(); break; // Draw Face001
-    case 0x32: Face002(); break; // Draw Face002
-    case 0x33: Face003(); break; // Draw Face003
-    case 0x34: Face004(); break; // Draw Face004
-    case 0x35: Face005(); break; // Draw Face005
-    case 0x36: Face006(); break; // Draw Face006
-    case 0x37: Face007(); break; // Draw Face007
-    case 0x38: Face008(); break; // Draw Face008
-    case 0x39: Face009(); break; // Draw Face009
-    case 0x41: Face011(); break; // Draw Face011
-    case 0x42: Face012(); break; // Draw Face012
-    case 0x43: Face013(); break; // Draw Face013
-    case 0x44: Face014(); break; // Draw Face014
-    case 0x45: Face015(); break; // Draw Face015
-    case 0x46: Face016(); break; // Draw Face016
-    case 0x47: Face017(); break; // Draw Face017
-    case 0x48: Face018(); break; // Draw Face018
-    case 0x49: Face019(); break; // Draw Face019
-    case 0x4A: Face020(); break; // Draw Face020
-    case 0x4B: Face021(); break; // Draw Face021
-    case 0x4C: Face022(); break; // Draw Face022
-    case 0x4D: Face023(); break; // Draw Face023
-    case 0x4E: Umbrella(); break; // Draw Umbrella Corp logo
+    case 0x2B: incrementBrightness(); break;
+    case 0x2D: decrementBrightness(); break;
+    case 0x30: face010(); break; // Draw Face010
+    case 0x31: face001(); break; // Draw Face001
+    case 0x32: face002(); break; // Draw Face002
+    case 0x33: face003(); break; // Draw Face003
+    case 0x34: face004(); break; // Draw Face004
+    case 0x35: face005(); break; // Draw Face005
+    case 0x36: face006(); break; // Draw Face006
+    case 0x37: face007(); break; // Draw Face007
+    case 0x38: face008(); break; // Draw Face008
+    case 0x39: face009(); break; // Draw Face009
+    case 0x41: face011(); break; // Draw Face011
+    case 0x42: face012(); break; // Draw Face012
+    case 0x43: face013(); break; // Draw Face013
+    case 0x44: face014(); break; // Draw Face014
+    case 0x45: face015(); break; // Draw Face015
+    case 0x46: face016(); break; // Draw Face016
+    case 0x47: face017(); break; // Draw Face017
+    case 0x48: face018(); break; // Draw Face018
+    case 0x49: face019(); break; // Draw Face019
+    case 0x4A: face020(); break; // Draw Face020
+    case 0x4B: face021(); break; // Draw Face021
+    case 0x4C: face022(); break; // Draw Face022
+    case 0x4D: face023(); break; // Draw Face023
+    case 0x4E: umbrella(); break; // Draw Umbrella Corp logo
     case 0x57: setFaceColor(colorRed); break;
     case 0x58: setFaceColor(colorGreen); break;
     case 0x59: setFaceColor(colorBlue); break;
     case 0x5A: setFaceColor(colorWhite); break;
    }
   }
-  BlinkFunction();
+  blinkFunction();
 }
 
 void connect_callback(uint16_t conn_handle)
@@ -1153,44 +1134,12 @@ void disconnect_callback(uint16_t conn_handle, uint8_t reason)
   Serial.println();
   Serial.println("Disconnected");
 }
-
-/**
- * RTOS Idle callback is automatically invoked by FreeRTOS
- * when there are no active threads. E.g when loop() calls delay() and
- * there is no bluetooth or hw event. This is the ideal place to handle
- * background data.
- * 
- * NOTE: It is recommended to call waitForEvent() to put MCU into low-power mode
- * at the end of this callback. You could also turn off other Peripherals such as
- * Serial/PWM and turn them back on if wanted
- * 
- * e.g
- * 
- * void rtos_idle_callback(void)
- * {
- *    Serial.stop(); // will lose data when sleeping
- *    waitForEvent();
- *    Serial.begin(115200); 
- * }
- * 
- * NOTE2: If rtos_idle_callback() is not defined at all. Bluefruit will force
- * waitForEvent() to save power. If you don't want MCU to sleep at all, define
- * an rtos_idle_callback() with empty body !
- * 
- * WARNING: This function MUST NOT call any blocking FreeRTOS API 
- * such as delay(), xSemaphoreTake() etc ... for more information
- * http://www.freertos.org/a00016.html
- */
 void rtos_idle_callback(void)
 {
-  // Don't call any other FreeRTOS blocking API()
-  // Perform background task(s) here
-
-  // Request CPU to enter low-power mode until an event/interrupt occurs
   waitForEvent();
 }
 
-void Face001()
+void face001()
 {
   lefteye.clear();
   righteye.clear();
@@ -1198,7 +1147,7 @@ void Face001()
   maskedColorWipeRightEye(color, face001_Right);
 }
 // Draw Face002
-void Face002()
+void face002()
 {
   lefteye.clear();
   righteye.clear();
@@ -1206,7 +1155,7 @@ void Face002()
   maskedColorWipeRightEye(color, face002_Right);
 }
 // Draw Face003
-void Face003()
+void face003()
 {
   lefteye.clear();
   righteye.clear();
@@ -1214,7 +1163,7 @@ void Face003()
   maskedColorWipeRightEye(color, face003_Right);
 }   
 // Draw Face004
-void Face004()
+void face004()
 {
   lefteye.clear();
   righteye.clear();
@@ -1222,7 +1171,7 @@ void Face004()
   maskedColorWipeRightEye(color, face004_Right);
 }
 // Draw Face005
-void Face005()
+void face005()
 {
   lefteye.clear();
   righteye.clear();
@@ -1230,7 +1179,7 @@ void Face005()
   maskedColorWipeRightEye(color, face005_Right);
 }
 // Draw Face006
-void Face006()
+void face006()
 {
   lefteye.clear();
   righteye.clear();
@@ -1238,7 +1187,7 @@ void Face006()
   maskedColorWipeRightEye(color, face006_Right);
 }
 // Draw Face007
-void Face007()
+void face007()
 {
   lefteye.clear();
   righteye.clear();
@@ -1246,7 +1195,7 @@ void Face007()
   maskedColorWipeRightEye(color, face007_Right);
 }
 // Draw Face008
-void Face008()
+void face008()
 {
   lefteye.clear();
   righteye.clear();
@@ -1254,7 +1203,7 @@ void Face008()
   maskedColorWipeRightEye(color, face008_Right);
 }
 // Draw Face009
-void Face009()
+void face009()
 {
   lefteye.clear();
   righteye.clear();
@@ -1262,7 +1211,7 @@ void Face009()
   maskedColorWipeRightEye(color, face009_Right);
 }
 // Draw Face010
-void Face010()
+void face010()
 {
   lefteye.clear();
   righteye.clear();
@@ -1270,7 +1219,7 @@ void Face010()
   maskedColorWipeRightEye(color, face010_Right);
 }
 // Draw Face011
-void Face011()
+void face011()
 {
   lefteye.clear();
   righteye.clear();
@@ -1278,7 +1227,7 @@ void Face011()
   maskedColorWipeRightEye(color, face011_Right);
 }
 // Draw Face012
-void Face012()
+void face012()
 {
   lefteye.clear();
   righteye.clear();
@@ -1286,7 +1235,7 @@ void Face012()
   maskedColorWipeRightEye(color, face012_Right);
 }
 // Draw Face013
-void Face013()
+void face013()
 {
   lefteye.clear();
   righteye.clear();
@@ -1294,7 +1243,7 @@ void Face013()
   maskedColorWipeRightEye(color, face013_Right);
 }
 // Draw Face014
-void Face014()
+void face014()
 {
   lefteye.clear();
   righteye.clear();
@@ -1302,7 +1251,7 @@ void Face014()
   maskedColorWipeRightEye(color, face014_Right);
 }
 // Draw Face015
-void Face015()
+void face015()
 {
   lefteye.clear();
   righteye.clear();
@@ -1310,7 +1259,7 @@ void Face015()
   maskedColorWipeRightEye(color, face015_Right);
 }
 // Draw Face016
-void Face016()
+void face016()
 {
   lefteye.clear();
   righteye.clear();
@@ -1318,7 +1267,7 @@ void Face016()
   maskedColorWipeRightEye(color, face016_Right);
 }
 // Draw Face017
-void Face017()
+void face017()
 {
   lefteye.clear();
   righteye.clear();
@@ -1326,14 +1275,14 @@ void Face017()
   maskedColorWipeRightEye(color, face017_Right);
 }
 // Draw Face018
-void Face018()
+void face018()
 {
   lefteye.clear();
   righteye.clear();
   maskedColorWipeLeftEye(color, face018_Left);
   maskedColorWipeRightEye(color, face018_Right);
 }
-void Face019()
+void face019()
 {
   lefteye.clear();
   righteye.clear();
@@ -1341,7 +1290,7 @@ void Face019()
   maskedColorWipeRightEye(color, face019_Right);
 }
 // Draw Face020
-void Face020()
+void face020()
 {
   lefteye.clear();
   righteye.clear();
@@ -1349,7 +1298,7 @@ void Face020()
   maskedColorWipeRightEye(color, face020_Right);
 }
 // Draw Face021
-void Face021()
+void face021()
 {
   lefteye.clear();
   righteye.clear();
@@ -1357,7 +1306,7 @@ void Face021()
   maskedColorWipeRightEye(color, face021_Right);
 }
 // Draw Face022
-void Face022()
+void face022()
 {
   lefteye.clear();
   righteye.clear();
@@ -1365,7 +1314,7 @@ void Face022()
   maskedColorWipeRightEye(color, face022_Right);
 }
 // Draw Face023
-void Face023()
+void face023()
 {
   lefteye.clear();
   righteye.clear();
@@ -1374,41 +1323,44 @@ void Face023()
 }
 
 // Umbrella Logo
-void Umbrella()
+void umbrella()
 {
-  DrawUmbrella();
+  lefteye.clear();
+  righteye.clear();
+  dualMaskedColorWipeLeftEye(colorRed, colorWhite, face024_Red, face024_White);
+  dualMaskedColorWipeRightEye(colorRed, colorWhite, face024_Red, face024_White); 
 }
 
-void IncrementBrightness()
+void incrementBrightness()
 {
-  if (EyeBrightness < 255){
-    EyeBrightness += 1;
+  if (eyeBrightness < 255){
+    eyeBrightness += 1;
     Serial.println("Incrementing Brightness by 1");
     Serial.print("Brightness:");
-    Serial.println(EyeBrightness);
-    lefteye.setBrightness(EyeBrightness);
-    righteye.setBrightness(EyeBrightness);
+    Serial.println(eyeBrightness);
+    lefteye.setBrightness(eyeBrightness);
+    righteye.setBrightness(eyeBrightness);
     lefteye.show(); 
     righteye.show();
   }
-  else if(EyeBrightness = 255){
+  else if(eyeBrightness = 255){
     Serial.println("Brightness already at maximum");
   }  
 }
 
-void DecrementBrightness()
+void decrementBrightness()
 {
-  if (EyeBrightness > 1){
-    EyeBrightness -= 1;
+  if (eyeBrightness > 1){
+    eyeBrightness -= 1;
     Serial.println("Decrementing Brightness by 1");
     Serial.print("Brightness:");
-    Serial.println(EyeBrightness);
-    lefteye.setBrightness(EyeBrightness);
-    righteye.setBrightness(EyeBrightness);
+    Serial.println(eyeBrightness);
+    lefteye.setBrightness(eyeBrightness);
+    righteye.setBrightness(eyeBrightness);
     lefteye.show(); 
     righteye.show();
   }
-  else if(EyeBrightness = 1){
+  else if(eyeBrightness = 1){
     Serial.println("Brightness already at minimum");
   }  
 }
@@ -1487,7 +1439,7 @@ void dualMaskedColorWipeRightEye(uint32_t color, uint32_t color2, byte mask[][RO
   delay(1);
 }
 
-void BlinkFunction()
+void blinkFunction()
 {
   currentMillis = millis(); // Set variable to see if it's time to change the state of the LEDs
   if ((ledState == 0) && (currentMillis - previousMillis >= OffTime)) // Turn on the LEDs 
@@ -1495,8 +1447,8 @@ void BlinkFunction()
     ledState = 1; // Set the LEDs status to on
     previousMillis = currentMillis;   // Remember the time
     Serial.println("Blink - LEDs ON"); // Debug output
-    lefteye.setBrightness(EyeBrightness);
-    righteye.setBrightness(EyeBrightness);
+    lefteye.setBrightness(eyeBrightness);
+    righteye.setBrightness(eyeBrightness);
     lefteye.show(); 
     righteye.show();
   }
@@ -1517,12 +1469,4 @@ void BlinkFunction()
 void setFaceColor(uint32_t colorVariable)
 {
   color=colorVariable;
-}
-
-void DrawUmbrella()
-{
-  lefteye.clear();
-  righteye.clear();
-  dualMaskedColorWipeLeftEye(colorRed, colorWhite, face024_Red, face024_White);
-  dualMaskedColorWipeRightEye(colorRed, colorWhite, face024_Red, face024_White); 
 }
