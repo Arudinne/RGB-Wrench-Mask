@@ -991,9 +991,6 @@ BLEBas  blebas;
 Unicorn_Hat_HD lefteye = Unicorn_Hat_HD(slaveSelectPinA);
 Unicorn_Hat_HD righteye = Unicorn_Hat_HD(slaveSelectPinB);
 
-// Define initial facial expression
-char FaceMode = 1;  
-
 // Define color parameters
 uint32_t colorRed = 0xFF0000;
 uint32_t colorGreen = 0x00FF00;
@@ -1011,7 +1008,10 @@ long OnTime = 6000; // milliseconds of on-time
 long OffTime = 70; // milliseconds of off-time
 byte EyeBrightness = 50;
 
-// Initial boolean variables for face status checks when switching faces
+// Initialize boolean variables for face status checks when switching faces
+
+//Startup
+bool startupCheck = false;
 // Face001
 bool Face001RunningCheck = false;
 bool Face001BlinkCheck = false;
@@ -1162,6 +1162,11 @@ void startAdv(void)
 
 void loop()
 { 
+  if(startupCheck == false)
+  {
+    Face001();
+    startupCheck = true;
+  }
   // Respond to command and forward from BLEUART to HW Serial for Debugging
   while ( bleuart.available() )
   {
@@ -1170,126 +1175,40 @@ void loop()
     Serial.print("Received Command: ");
     Serial.write(ch);
     Serial.println("");
-    if(ch == 0x57){
-      setFaceColor(colorRed); 
-    }
-    else if(ch == 0x58){
-      setFaceColor(colorGreen); 
-    } 
-    else if(ch == 0x59){
-      setFaceColor(colorBlue); 
-    } 
-    else if(ch == 0x5A){
-      setFaceColor(colorWhite); 
-    } 
-    else if(ch == 0x31){
-      FaceMode=1;
-    }
-    else if(ch == 0x32){
-      FaceMode=2;
-    }
-    else if(ch == 0x33){
-      FaceMode=3;
-    }
-    else if(ch == 0x34){
-      FaceMode=4;
-    }
-    else if(ch == 0x35){
-      FaceMode=5;
-    }
-    else if(ch == 0x36){
-      FaceMode=6;
-    }
-    else if(ch == 0x37){
-      FaceMode=7;
-    }
-    else if(ch == 0x38){
-      FaceMode=8;
-    }
-    else if(ch == 0x39){
-      FaceMode=9;
-    }
-    else if(ch == 0x30){
-      FaceMode=0;
-    }
-    else if(ch == 0x41){
-      FaceMode='A';
-    }
-    else if(ch == 0x42){
-      FaceMode='B';
-    }
-    else if(ch == 0x43){
-      FaceMode='C';
-    }
-    else if(ch == 0x44){
-      FaceMode='D';
-    }
-    else if(ch == 0x45){
-      FaceMode='E';
-    }
-    else if(ch == 0x46){
-      FaceMode='F';
-    }
-    else if(ch == 0x47){
-      FaceMode='G';
-    }
-    else if(ch == 0x48){
-      FaceMode='H';
-    }
-    else if(ch == 0x49){
-      FaceMode='I';
-    }
-    else if(ch == 0x4A){
-      FaceMode='J';
-    }
-    else if(ch == 0x4B){
-      FaceMode='K';
-    }
-    else if(ch == 0x4C){
-      FaceMode='L';
-    }
-    else if(ch == 0x4D){
-      FaceMode='M';
-    }
-    else if(ch == 0x4E){
-      FaceMode='N';
-      Serial.println("Umbrella LEDs ON");
-    }
-    else if(ch == 0x2B){
-      IncrementBrightness();
-    }
-    else if(ch == 0x2D){
-      DecrementBrightness();
-    }
-  }
-
-  switch (FaceMode) 
+    switch (ch) 
    {
-    case 1: Face001(); break; // Draw Face001
-    case 2: Face002(); break; // Draw Face002
-    case 3: Face003(); break; // Draw Face003
-    case 4: Face004(); break; // Draw Face004
-    case 5: Face005(); break; // Draw Face005
-    case 6: Face006(); break; // Draw Face006
-    case 7: Face007(); break; // Draw Face007
-    case 8: Face008(); break; // Draw Face008
-    case 9: Face009(); break; // Draw Face009
-    case 0: Face010(); break; // Draw Face010
-    case 'A': Face011(); break; // Draw Face011
-    case 'B': Face012(); break; // Draw Face012
-    case 'C': Face013(); break; // Draw Face013
-    case 'D': Face014(); break; // Draw Face014
-    case 'E': Face015(); break; // Draw Face015
-    case 'F': Face016(); break; // Draw Face016
-    case 'G': Face017(); break; // Draw Face017
-    case 'H': Face018(); break; // Draw Face018
-    case 'I': Face019(); break; // Draw Face019
-    case 'J': Face020(); break; // Draw Face020
-    case 'K': Face021(); break; // Draw Face021
-    case 'L': Face022(); break; // Draw Face022
-    case 'M': Face023(); break; // Draw Face023
-    case 'N': Umbrella(); break; // Draw Umbrella Corp logo
+    case 0x2B: IncrementBrightness(); break;
+    case 0x2D: DecrementBrightness(); break;
+    case 0x30: Face010(); break; // Draw Face010
+    case 0x31: Face001(); break; // Draw Face001
+    case 0x32: Face002(); break; // Draw Face002
+    case 0x33: Face003(); break; // Draw Face003
+    case 0x34: Face004(); break; // Draw Face004
+    case 0x35: Face005(); break; // Draw Face005
+    case 0x36: Face006(); break; // Draw Face006
+    case 0x37: Face007(); break; // Draw Face007
+    case 0x38: Face008(); break; // Draw Face008
+    case 0x39: Face009(); break; // Draw Face009
+    case 0x41: Face011(); break; // Draw Face011
+    case 0x42: Face012(); break; // Draw Face012
+    case 0x43: Face013(); break; // Draw Face013
+    case 0x44: Face014(); break; // Draw Face014
+    case 0x45: Face015(); break; // Draw Face015
+    case 0x46: Face016(); break; // Draw Face016
+    case 0x47: Face017(); break; // Draw Face017
+    case 0x48: Face018(); break; // Draw Face018
+    case 0x49: Face019(); break; // Draw Face019
+    case 0x4A: Face020(); break; // Draw Face020
+    case 0x4B: Face021(); break; // Draw Face021
+    case 0x4C: Face022(); break; // Draw Face022
+    case 0x4D: Face023(); break; // Draw Face023
+    case 0x4E: Umbrella(); break; // Draw Umbrella Corp logo
+    case 0x57: setFaceColor(colorRed); break;
+    case 0x58: setFaceColor(colorGreen); break;
+    case 0x59: setFaceColor(colorBlue); break;
+    case 0x5A: setFaceColor(colorWhite); break;
    }
+  }
 }
 
 void connect_callback(uint16_t conn_handle)
