@@ -1012,78 +1012,6 @@ byte EyeBrightness = 50;
 
 //Startup
 bool startupCheck = false;
-// Face001
-bool Face001RunningCheck = false;
-bool Face001BlinkCheck = false;
-// Face002 
-bool Face002RunningCheck = false;
-bool Face002BlinkCheck = false;
-// Face003
-bool Face003RunningCheck = false;
-bool Face003BlinkCheck = false; 
-// Face004
-bool Face004RunningCheck = false;
-bool Face004BlinkCheck = false;
-// Face005
-bool Face005RunningCheck = false;
-bool Face005BlinkCheck = false;
-// Face006 
-bool Face006RunningCheck = false;
-bool Face006BlinkCheck = false;
-// Face007
-bool Face007RunningCheck = false;
-bool Face007BlinkCheck = false; 
-// Face008
-bool Face008RunningCheck = false;
-bool Face008BlinkCheck = false;
-// Face009
-bool Face009RunningCheck = false;
-bool Face009BlinkCheck = false; 
-// Face010
-bool Face010RunningCheck = false;
-bool Face010BlinkCheck = false;
-// Face011
-bool Face011RunningCheck = false;
-bool Face011BlinkCheck = false;
-// Face012
-bool Face012RunningCheck = false;
-bool Face012BlinkCheck = false;
-// Face013
-bool Face013RunningCheck = false;
-bool Face013BlinkCheck = false;
-// Face014
-bool Face014RunningCheck = false;
-bool Face014BlinkCheck = false;
-// Face015
-bool Face015RunningCheck = false;
-bool Face015BlinkCheck = false;
-// Face016
-bool Face016RunningCheck = false;
-bool Face016BlinkCheck = false;
-// Face017
-bool Face017RunningCheck = false;
-bool Face017BlinkCheck = false;
-// Face018
-bool Face018RunningCheck = false;
-bool Face018BlinkCheck = false;
-// Face019
-bool Face019RunningCheck = false;
-bool Face019BlinkCheck = false;
-// Face020
-bool Face020RunningCheck = false;
-bool Face020BlinkCheck = false;
-// Face021
-bool Face021RunningCheck = false;
-bool Face021BlinkCheck = false;
-// Face022
-bool Face022RunningCheck = false;
-bool Face022BlinkCheck = false;
-// Face023
-bool Face023RunningCheck = false;
-bool Face023BlinkCheck = false;
-// Face024
-bool Face024RunningCheck = false;
-
 bool drawGivenMask(int row, int col, byte mask[][ROW_SIZE])
 {
   col = col % ROW_SIZE;
@@ -1104,13 +1032,13 @@ void setup()
   
   Serial.begin(115200); // Enable Serial for debugging purposes
   Serial.println("=======================================");
+  Serial.println("||   Begin RGB Wrnech Mask Program   ||");
   Serial.println("|| Opening Serial port for Debugging ||");
-  Serial.println("||     Begin Wrnech Mask Program     ||");
   Serial.println("=======================================");
 
   //Configure BLE
   Bluefruit.begin();
-  // Set max power. Accepted values are: -40, -30, -20, -16, -12, -8, -4, 0, 4
+  // Set Max power. Accepted values are: -40, -30, -20, -16, -12, -8, -4, 0, 4
   Bluefruit.setTxPower(4);
   Bluefruit.setName("Wrench Mask");
   Bluefruit.setConnectCallback(connect_callback);
@@ -1130,6 +1058,7 @@ void setup()
 
   // Set up and start advertising
   startAdv();
+  Face001();
 }
 
 void startAdv(void)
@@ -1162,11 +1091,6 @@ void startAdv(void)
 
 void loop()
 { 
-  if(startupCheck == false)
-  {
-    Face001();
-    startupCheck = true;
-  }
   // Respond to command and forward from BLEUART to HW Serial for Debugging
   while ( bleuart.available() )
   {
@@ -1209,6 +1133,7 @@ void loop()
     case 0x5A: setFaceColor(colorWhite); break;
    }
   }
+  BlinkFunction();
 }
 
 void connect_callback(uint16_t conn_handle)
@@ -1267,898 +1192,191 @@ void rtos_idle_callback(void)
 
 void Face001()
 {
-  if (Face001RunningCheck == false) // Check to see if this face is currently running or was recently started - this was added to prevent double blinking when switching faces
-  {
-    Serial.println("Blink Paused");
-    lefteye.clear();
-    righteye.clear();
-    maskedColorWipeLeftEye(color, face001_Left);
-    maskedColorWipeRightEye(color, face001_Right);
-    FaceRunningCheckClearFunction();
-    Face001RunningCheck = true;
-    // Clearing BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    Face001BlinkCheck = false;
-  }
-  currentMillis = millis(); // Set variable to see if it's time to change the state of the LEDs
-  if ((ledState == 0) && (currentMillis - previousMillis >= OffTime)) // Turn on the LEDs 
-  {
-    ledState = 1; // Set the LEDs status to on
-    previousMillis = currentMillis;   // Remember the time
-    Serial.println("Face001 LEDs ON"); // Debug output
-    maskedColorWipeLeftEye(color, face001_Left);
-    maskedColorWipeRightEye(color, face001_Right);
-  }
-  else if((ledState == 1) && (currentMillis - previousMillis >= OnTime)) // Blink off the LEDs 
-  {
-    ledState = 0; // Set the LEDs status to off
-    previousMillis = currentMillis; // Remember the time
-    if(Face001BlinkCheck == true) // Checking BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    {
-    Serial.println("Face001 LEDs OFF - Blink"); // Debug output
-    BlinkFunction("001");
-    }
-    else
-    {
-    Face001BlinkCheck= true; // Setting BlinkCheck to allow blinking
-    Serial.println("Blink Resumed"); // Debug output
-    }
-  }  
+  lefteye.clear();
+  righteye.clear();
+  maskedColorWipeLeftEye(color, face001_Left);
+  maskedColorWipeRightEye(color, face001_Right);
 }
 // Draw Face002
 void Face002()
 {
-  if (Face002RunningCheck == false) // Check to see if this face is currently running or was recently started - this was added to prevent double blinking when switching faces
-  {
-    Serial.println("Blink Paused");
-    maskedColorWipeLeftEye(color, face002_Left);
-    maskedColorWipeRightEye(color, face002_Right);
-    FaceRunningCheckClearFunction();
-    Face002RunningCheck = true;
-    // Clearing BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    Face002BlinkCheck = false;
-  }
-  currentMillis = millis(); // Set variable to see if it's time to change the state of the LEDs
-  if ((ledState == 0) && (currentMillis - previousMillis >= OffTime)) // Turn on the LEDs 
-  {
-    ledState = 1;  // Set the LEDs status to on
-    previousMillis = currentMillis; // Remember the time
-    Serial.println("Face002 LEDs ON"); // Debug output
-    maskedColorWipeLeftEye(color, face002_Left);
-    maskedColorWipeRightEye(color, face002_Right);
-    }
-    else if((ledState == 1) && (currentMillis - previousMillis >= OnTime)) // Blink off the LEDs 
-   {
-    ledState = 0;  // Set the LEDs status to off
-    previousMillis = currentMillis; // Remember the time
-     if(Face002BlinkCheck == true) // Checking BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    {
-    Serial.println("Face002 LEDs OFF - Blink"); // Debug output
-    BlinkFunction("002");
-    }
-    else
-    {
-    Face002BlinkCheck= true; // Setting BlinkCheck to allow blinking
-    Serial.println("Blink Resumed"); // Debug output
-   } 
-   } 
+  lefteye.clear();
+  righteye.clear();
+  maskedColorWipeLeftEye(color, face002_Left);
+  maskedColorWipeRightEye(color, face002_Right);
 }
 // Draw Face003
 void Face003()
 {
-  if (Face003RunningCheck == false) // Check to see if this face is currently running or was recently started - this was added to prevent double blinking when switching faces
-  {
-    Serial.println("Blink Paused");
-    maskedColorWipeLeftEye(color, face003_Left);
-    maskedColorWipeRightEye(color, face003_Right);
-    FaceRunningCheckClearFunction();
-    Face003RunningCheck = true;
-    // Clearing BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    Face003BlinkCheck = false;
-  }
-  currentMillis = millis(); // Set variable to see if it's time to change the state of the LEDs
-  if ((ledState == 0) && (currentMillis - previousMillis >= OffTime)) // Turn on the LEDs 
-  {
-    ledState = 1;  // Set the LEDs status to on
-    previousMillis = currentMillis; // Remember the time
-    Serial.println("Face003 LEDs ON"); // Debug output
-    maskedColorWipeLeftEye(color, face003_Left);
-    maskedColorWipeRightEye(color, face003_Right);
-    }
-    else if((ledState == 1) && (currentMillis - previousMillis >= OnTime)) // Blink off the LEDs 
-   {
-    ledState = 0;  // Set the LEDs status to off
-    previousMillis = currentMillis; // Remember the time
-     if(Face003BlinkCheck == true) // Checking BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    {
-    Serial.println("Face003 LEDs OFF - Blink"); // Debug output
-    BlinkFunction("003");
-    }
-    else
-    {
-    Face003BlinkCheck= true; // Setting BlinkCheck to allow blinking
-    Serial.println("Blink Resumed"); // Debug output
-   } 
-   } 
+  lefteye.clear();
+  righteye.clear();
+  maskedColorWipeLeftEye(color, face003_Left);
+  maskedColorWipeRightEye(color, face003_Right);
 }   
 // Draw Face004
 void Face004()
 {
-  if (Face004RunningCheck == false) // Check to see if this face is currently running or was recently started - this was added to prevent double blinking when switching faces
-  {
-    Serial.println("Blink Paused");
-    maskedColorWipeLeftEye(color, face004_Left);
-    maskedColorWipeRightEye(color, face004_Right);
-    FaceRunningCheckClearFunction();
-    Face004RunningCheck = true;
-    // Clearing BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    Face004BlinkCheck = false;
-  }
-  currentMillis = millis(); // Set variable to see if it's time to change the state of the LEDs
-  if ((ledState == 0) && (currentMillis - previousMillis >= OffTime)) // Turn on the LEDs 
-  {
-    ledState = 1;  // Set the LEDs status to on
-    previousMillis = currentMillis; // Remember the time
-    Serial.println("Face004 LEDs ON"); // Debug output
-    maskedColorWipeLeftEye(color, face004_Left);
-    maskedColorWipeRightEye(color, face004_Right); 
-    }
-    else if((ledState == 1) && (currentMillis - previousMillis >= OnTime)) // Blink off the LEDs 
-   {
-    ledState = 0;  // Set the LEDs status to off
-    previousMillis = currentMillis; // Remember the time
-     if(Face004BlinkCheck == true) // Checking BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    {
-    Serial.println("Face004 LEDs OFF - Blink"); // Debug output
-    BlinkFunction("004");
-    }
-    else
-    {
-    Face004BlinkCheck= true; // Setting BlinkCheck to allow blinking
-    Serial.println("Blink Resumed"); // Debug output
-   } 
-   } 
+  lefteye.clear();
+  righteye.clear();
+  maskedColorWipeLeftEye(color, face004_Left);
+  maskedColorWipeRightEye(color, face004_Right);
 }
 // Draw Face005
 void Face005()
 {
-  if (Face005RunningCheck == false) // Check to see if this face is currently running or was recently started - this was added to prevent double blinking when switching faces
-  {
-    Serial.println("Blink Paused");
-    maskedColorWipeLeftEye(color, face005_Left);
-    maskedColorWipeRightEye(color, face005_Right);
-    FaceRunningCheckClearFunction();
-    Face005RunningCheck = true;
-    // Clearing BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    Face005BlinkCheck = false;
-  }
-  currentMillis = millis(); // Set variable to see if it's time to change the state of the LEDs
-  if ((ledState == 0) && (currentMillis - previousMillis >= OffTime)) // Turn on the LEDs 
-  {
-    ledState = 1;  // Set the LEDs status to on
-    previousMillis = currentMillis; // Remember the time
-    Serial.println("Face005 LEDs ON"); // Debug output
-    maskedColorWipeLeftEye(color, face005_Left);
-    maskedColorWipeRightEye(color, face005_Right);
-    }
-    else if((ledState == 1) && (currentMillis - previousMillis >= OnTime)) // Blink off the LEDs 
-   {
-    ledState = 0;  // Set the LEDs status to off
-    previousMillis = currentMillis; // Remember the time
-     if(Face005BlinkCheck == true) // Checking BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    {
-    Serial.println("Face005 LEDs OFF - Blink"); // Debug output
-    BlinkFunction("005");
-    }
-    else
-    {
-    Face005BlinkCheck= true; // Setting BlinkCheck to allow blinking
-    Serial.println("Blink Resumed"); // Debug output
-   } 
-   } 
+  lefteye.clear();
+  righteye.clear();
+  maskedColorWipeLeftEye(color, face005_Left);
+  maskedColorWipeRightEye(color, face005_Right);
 }
 // Draw Face006
 void Face006()
 {
-  if (Face006RunningCheck == false) // Check to see if this face is currently running or was recently started - this was added to prevent double blinking when switching faces
-  {
-    Serial.println("Blink Paused");
-    maskedColorWipeLeftEye(color, face006_Left);
-    maskedColorWipeRightEye(color, face006_Right);
-    FaceRunningCheckClearFunction();
-    Face006RunningCheck = true;
-    // Clearing BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    Face006BlinkCheck = false;
-  }
-  currentMillis = millis(); // Set variable to see if it's time to change the state of the LEDs
-  if ((ledState == 0) && (currentMillis - previousMillis >= OffTime)) // Turn on the LEDs 
-  {
-    ledState = 1;  // Set the LEDs status to on
-    previousMillis = currentMillis; // Remember the time
-    Serial.println("Face006 LEDs ON"); // Debug output
-    maskedColorWipeLeftEye(color, face006_Left);
-    maskedColorWipeRightEye(color, face006_Right);
-    }
-    else if((ledState == 1) && (currentMillis - previousMillis >= OnTime)) // Blink off the LEDs 
-   {
-    ledState = 0;  // Set the LEDs status to off
-    previousMillis = currentMillis; // Remember the time
-     if(Face006BlinkCheck == true) // Checking BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    {
-    Serial.println("Face006 LEDs OFF - Blink"); // Debug output
-    BlinkFunction("006");
-    }
-    else
-    {
-    Face006BlinkCheck= true; // Setting BlinkCheck to allow blinking
-    Serial.println("Blink Resumed"); // Debug output
-   } 
-   } 
+  lefteye.clear();
+  righteye.clear();
+  maskedColorWipeLeftEye(color, face006_Left);
+  maskedColorWipeRightEye(color, face006_Right);
 }
 // Draw Face007
 void Face007()
 {
-  if (Face007RunningCheck == false) // Check to see if this face is currently running or was recently started - this was added to prevent double blinking when switching faces
-  {
-    Serial.println("Blink Paused");
-    maskedColorWipeLeftEye(color, face007_Left);
-    maskedColorWipeRightEye(color, face007_Right);
-    FaceRunningCheckClearFunction();
-    Face007RunningCheck = true;
-    // Clearing BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    Face007BlinkCheck = false;
-  }
-  currentMillis = millis(); // Set variable to see if it's time to change the state of the LEDs
-  if ((ledState == 0) && (currentMillis - previousMillis >= OffTime)) // Turn on the LEDs 
-  {
-    ledState = 1;  // Set the LEDs status to on
-    previousMillis = currentMillis; // Remember the time
-    Serial.println("Face007 LEDs ON"); // Debug output
-    maskedColorWipeLeftEye(color, face007_Left);
-    maskedColorWipeRightEye(color, face007_Right);
-    }
-    else if((ledState == 1) && (currentMillis - previousMillis >= OnTime)) // Blink off the LEDs 
-   {
-    ledState = 0;  // Set the LEDs status to off
-    previousMillis = currentMillis; // Remember the time
-     if(Face007BlinkCheck == true) // Checking BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    {
-    Serial.println("Face007 LEDs OFF - Blink"); // Debug output
-    BlinkFunction("007");
-    }
-    else
-    {
-    Face007BlinkCheck= true; // Setting BlinkCheck to allow blinking
-    Serial.println("Blink Resumed"); // Debug output
-   } 
-   } 
+  lefteye.clear();
+  righteye.clear();
+  maskedColorWipeLeftEye(color, face007_Left);
+  maskedColorWipeRightEye(color, face007_Right);
 }
 // Draw Face008
 void Face008()
 {
-  if (Face008RunningCheck == false) // Check to see if this face is currently running or was recently started - this was added to prevent double blinking when switching faces
-  {
-    Serial.println("Blink Paused");
-    maskedColorWipeLeftEye(color, face008_Left);
-    maskedColorWipeRightEye(color, face008_Right);
-    FaceRunningCheckClearFunction();
-    Face008RunningCheck = true;
-    // Clearing BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    Face008BlinkCheck = false;
-  }
-  currentMillis = millis(); // Set variable to see if it's time to change the state of the LEDs
-  if ((ledState == 0) && (currentMillis - previousMillis >= OffTime)) // Turn on the LEDs 
-  {
-    ledState = 1;  // Set the LEDs status to on
-    previousMillis = currentMillis; // Remember the time
-    Serial.println("Face008 LEDs ON"); // Debug output
-    maskedColorWipeLeftEye(color, face008_Left);
-    maskedColorWipeRightEye(color, face008_Right);
-    }
-    else if((ledState == 1) && (currentMillis - previousMillis >= OnTime)) // Blink off the LEDs 
-   {
-    ledState = 0;  // Set the LEDs status to off
-    previousMillis = currentMillis; // Remember the time
-     if(Face008BlinkCheck == true) // Checking BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    {
-    BlinkFunction("008");
-    }
-    else
-    {
-    Face008BlinkCheck= true; // Setting BlinkCheck to allow blinking
-    Serial.println("Blink Resumed"); // Debug output
-   } 
-   } 
+  lefteye.clear();
+  righteye.clear();
+  maskedColorWipeLeftEye(color, face008_Left);
+  maskedColorWipeRightEye(color, face008_Right);
 }
 // Draw Face009
 void Face009()
 {
-  if (Face009RunningCheck == false) // Check to see if this face is currently running or was recently started - this was added to prevent double blinking when switching faces
-  {
-    Serial.println("Blink Paused");
-    maskedColorWipeLeftEye(color, face009_Left);
-    maskedColorWipeRightEye(color, face009_Right);
-    FaceRunningCheckClearFunction();
-    Face009RunningCheck = true;
-    // Clearing BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    Face009BlinkCheck = false;
-  }
-  currentMillis = millis(); // Set variable to see if it's time to change the state of the LEDs
-  if ((ledState == 0) && (currentMillis - previousMillis >= OffTime)) // Turn on the LEDs 
-  {
-    ledState = 1;  // Set the LEDs status to on
-    previousMillis = currentMillis; // Remember the time
-    Serial.println("Face009 LEDs ON"); // Debug output
-    maskedColorWipeLeftEye(color, face009_Left);
-    maskedColorWipeRightEye(color, face009_Right);
-    }
-    else if((ledState == 1) && (currentMillis - previousMillis >= OnTime)) // Blink off the LEDs 
-   {
-    ledState = 0;  // Set the LEDs status to off
-    previousMillis = currentMillis; // Remember the time
-     if(Face009BlinkCheck == true) // Checking BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    {
-    BlinkFunction("009");
-    }
-    else
-    {
-    Face009BlinkCheck= true; // Setting BlinkCheck to allow blinking
-    Serial.println("Blink Resumed"); // Debug output
-   } 
-   } 
+  lefteye.clear();
+  righteye.clear();
+  maskedColorWipeLeftEye(color, face009_Left);
+  maskedColorWipeRightEye(color, face009_Right);
 }
 // Draw Face010
 void Face010()
 {
-  if (Face010RunningCheck == false) // Check to see if this face is currently running or was recently started - this was added to prevent double blinking when switching faces
-  {
-    Serial.println("Blink Paused");
-    maskedColorWipeLeftEye(color, face010_Left);
-    maskedColorWipeRightEye(color, face010_Right);
-    FaceRunningCheckClearFunction();
-    Face010RunningCheck = true;
-    // Clearing BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    Face010BlinkCheck = false;
-  }
-  currentMillis = millis(); // Set variable to see if it's time to change the state of the LEDs
-  if ((ledState == 0) && (currentMillis - previousMillis >= OffTime)) // Turn on the LEDs 
-  {
-    ledState = 1;  // Set the LEDs status to on
-    previousMillis = currentMillis; // Remember the time
-    Serial.println("Face010 LEDs ON"); // Debug output
-    maskedColorWipeLeftEye(color, face010_Left);
-    maskedColorWipeRightEye(color, face010_Right);
-    }
-    else if((ledState == 1) && (currentMillis - previousMillis >= OnTime)) // Blink off the LEDs 
-   {
-    ledState = 0;  // Set the LEDs status to off
-    previousMillis = currentMillis; // Remember the time
-     if(Face010BlinkCheck == true) // Checking BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    {
-    BlinkFunction("010");
-    }
-    else
-    {
-    Face010BlinkCheck= true; // Setting BlinkCheck to allow blinking
-    Serial.println("Blink Resumed"); // Debug output
-   } 
-   } 
+  lefteye.clear();
+  righteye.clear();
+  maskedColorWipeLeftEye(color, face010_Left);
+  maskedColorWipeRightEye(color, face010_Right);
 }
 // Draw Face011
 void Face011()
 {
-  if (Face011RunningCheck == false) // Check to see if this face is currently running or was recently started - this was added to prevent double blinking when switching faces
-  {
-    Serial.println("Blink Paused");
-    maskedColorWipeLeftEye(color, face011_Left);
-    maskedColorWipeRightEye(color, face011_Right);
-    FaceRunningCheckClearFunction();
-    Face011RunningCheck = true;
-    // Clearing BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    Face011BlinkCheck = false;
-  }
-  currentMillis = millis(); // Set variable to see if it's time to change the state of the LEDs
-  if ((ledState == 0) && (currentMillis - previousMillis >= OffTime)) // Turn on the LEDs 
-  {
-    ledState = 1;  // Set the LEDs status to on
-    previousMillis = currentMillis; // Remember the time
-    Serial.println("Face011 LEDs ON"); // Debug output
-    maskedColorWipeLeftEye(color, face011_Left);
-    maskedColorWipeRightEye(color, face011_Right);
-    }
-    else if((ledState == 1) && (currentMillis - previousMillis >= OnTime)) // Blink off the LEDs 
-   {
-    ledState = 0;  // Set the LEDs status to off
-    previousMillis = currentMillis; // Remember the time
-     if(Face011BlinkCheck == true) // Checking BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    {
-    BlinkFunction("011");
-    }
-    else
-    {
-    Face011BlinkCheck= true; // Setting BlinkCheck to allow blinking
-    Serial.println("Blink Resumed"); // Debug output
-   } 
-   } 
+  lefteye.clear();
+  righteye.clear();
+  maskedColorWipeLeftEye(color, face011_Left);
+  maskedColorWipeRightEye(color, face011_Right);
 }
 // Draw Face012
 void Face012()
 {
-  if (Face012RunningCheck == false) // Check to see if this face is currently running or was recently started - this was added to prevent double blinking when switching faces
-  {
-    Serial.println("Blink Paused");
-    maskedColorWipeLeftEye(color, face012_Left);
-    maskedColorWipeRightEye(color, face012_Right);
-    FaceRunningCheckClearFunction();
-    Face012RunningCheck = true;
-    // Clearing BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    Face012BlinkCheck = false;
-  }
-  currentMillis = millis(); // Set variable to see if it's time to change the state of the LEDs
-  if ((ledState == 0) && (currentMillis - previousMillis >= OffTime)) // Turn on the LEDs 
-  {
-    ledState = 1;  // Set the LEDs status to on
-    previousMillis = currentMillis; // Remember the time
-    Serial.println("Face012 LEDs ON"); // Debug output
-    maskedColorWipeLeftEye(color, face012_Left);
-    maskedColorWipeRightEye(color, face012_Right);
-    }
-    else if((ledState == 1) && (currentMillis - previousMillis >= OnTime)) // Blink off the LEDs 
-   {
-    ledState = 0;  // Set the LEDs status to off
-    previousMillis = currentMillis; // Remember the time
-     if(Face012BlinkCheck == true) // Checking BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    {
-    BlinkFunction("012");
-    }
-    else
-    {
-    Face012BlinkCheck= true; // Setting BlinkCheck to allow blinking
-    Serial.println("Blink Resumed"); // Debug output
-   } 
-   } 
+  lefteye.clear();
+  righteye.clear();
+  maskedColorWipeLeftEye(color, face012_Left);
+  maskedColorWipeRightEye(color, face012_Right);
 }
 // Draw Face013
 void Face013()
 {
-  if (Face013RunningCheck == false) // Check to see if this face is currently running or was recently started - this was added to prevent double blinking when switching faces
-  {
-    Serial.println("Blink Paused");
-    maskedColorWipeLeftEye(color, face013_Left);
-    maskedColorWipeRightEye(color, face013_Right);
-    FaceRunningCheckClearFunction();
-    Face013RunningCheck = true;
-    // Clearing BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    Face013BlinkCheck = false;
-  }
-  currentMillis = millis(); // Set variable to see if it's time to change the state of the LEDs
-  if ((ledState == 0) && (currentMillis - previousMillis >= OffTime)) // Turn on the LEDs 
-  {
-    ledState = 1;  // Set the LEDs status to on
-    previousMillis = currentMillis; // Remember the time
-    Serial.println("Face013 LEDs ON"); // Debug output
-    maskedColorWipeLeftEye(color, face013_Left);
-    maskedColorWipeRightEye(color, face013_Right);
-    }
-    else if((ledState == 1) && (currentMillis - previousMillis >= OnTime)) // Blink off the LEDs 
-   {
-    ledState = 0;  // Set the LEDs status to off
-    previousMillis = currentMillis; // Remember the time
-     if(Face013BlinkCheck == true) // Checking BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    {
-    BlinkFunction("013");
-    }
-    else
-    {
-    Face013BlinkCheck= true; // Setting BlinkCheck to allow blinking
-    Serial.println("Blink Resumed"); // Debug output
-   } 
-   } 
+  lefteye.clear();
+  righteye.clear();
+  maskedColorWipeLeftEye(color, face013_Left);
+  maskedColorWipeRightEye(color, face013_Right);
 }
 // Draw Face014
 void Face014()
 {
-  if (Face014RunningCheck == false) // Check to see if this face is currently running or was recently started - this was added to prevent double blinking when switching faces
-  {
-    Serial.println("Blink Paused");
-    maskedColorWipeLeftEye(color, face014_Left);
-    maskedColorWipeRightEye(color, face014_Right);
-    FaceRunningCheckClearFunction();
-    Face014RunningCheck = true;
-    // Clearing BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    Face014BlinkCheck = false;
-  }
-  currentMillis = millis(); // Set variable to see if it's time to change the state of the LEDs
-  if ((ledState == 0) && (currentMillis - previousMillis >= OffTime)) // Turn on the LEDs 
-  {
-    ledState = 1;  // Set the LEDs status to on
-    previousMillis = currentMillis; // Remember the time
-    Serial.println("Face014 LEDs ON"); // Debug output
-    maskedColorWipeLeftEye(color, face014_Left);
-    maskedColorWipeRightEye(color, face014_Right);
-    }
-    else if((ledState == 1) && (currentMillis - previousMillis >= OnTime)) // Blink off the LEDs 
-   {
-    ledState = 0;  // Set the LEDs status to off
-    previousMillis = currentMillis; // Remember the time
-     if(Face014BlinkCheck == true) // Checking BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    {
-    BlinkFunction("014");
-    }
-    else
-    {
-    Face014BlinkCheck= true; // Setting BlinkCheck to allow blinking
-    Serial.println("Blink Resumed"); // Debug output
-   } 
-   } 
+  lefteye.clear();
+  righteye.clear();
+  maskedColorWipeLeftEye(color, face014_Left);
+  maskedColorWipeRightEye(color, face014_Right);
 }
 // Draw Face015
 void Face015()
 {
-  if (Face015RunningCheck == false) // Check to see if this face is currently running or was recently started - this was added to prevent double blinking when switching faces
-  {
-    Serial.println("Blink Paused");
-    maskedColorWipeLeftEye(color, face015_Left);
-    maskedColorWipeRightEye(color, face015_Right);
-    FaceRunningCheckClearFunction();
-    Face015RunningCheck = true;
-    // Clearing BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    Face015BlinkCheck = false;
-  }
-  currentMillis = millis(); // Set variable to see if it's time to change the state of the LEDs
-  if ((ledState == 0) && (currentMillis - previousMillis >= OffTime)) // Turn on the LEDs 
-  {
-    ledState = 1;  // Set the LEDs status to on
-    previousMillis = currentMillis; // Remember the time
-    Serial.println("Face015 LEDs ON"); // Debug output
-    maskedColorWipeLeftEye(color, face015_Left);
-    maskedColorWipeRightEye(color, face015_Right);
-    }
-    else if((ledState == 1) && (currentMillis - previousMillis >= OnTime)) // Blink off the LEDs 
-   {
-    ledState = 0;  // Set the LEDs status to off
-    previousMillis = currentMillis; // Remember the time
-     if(Face015BlinkCheck == true) // Checking BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    {
-    Serial.println("Face015 LEDs OFF - Blink"); // Debug output
-    BlinkFunction("015");
-    }
-    else
-    {
-    Face015BlinkCheck= true; // Setting BlinkCheck to allow blinking
-    Serial.println("Blink Resumed"); // Debug output
-   } 
-   } 
+  lefteye.clear();
+  righteye.clear();
+  maskedColorWipeLeftEye(color, face015_Left);
+  maskedColorWipeRightEye(color, face015_Right);
 }
 // Draw Face016
 void Face016()
 {
-  if (Face016RunningCheck == false) // Check to see if this face is currently running or was recently started - this was added to prevent double blinking when switching faces
-  {
-    Serial.println("Blink Paused");
-    maskedColorWipeLeftEye(color, face016_Left);
-    maskedColorWipeRightEye(color, face016_Right);
-    FaceRunningCheckClearFunction();
-    Face016RunningCheck = true;
-    // Clearing BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    Face016BlinkCheck = false;
-  }
-  currentMillis = millis(); // Set variable to see if it's time to change the state of the LEDs
-  if ((ledState == 0) && (currentMillis - previousMillis >= OffTime)) // Turn on the LEDs 
-  {
-    ledState = 1;  // Set the LEDs status to on
-    previousMillis = currentMillis; // Remember the time
-    Serial.println("Face016 LEDs ON"); // Debug output
-    maskedColorWipeLeftEye(color, face016_Left);
-    maskedColorWipeRightEye(color, face016_Right);
-    }
-    else if((ledState == 1) && (currentMillis - previousMillis >= OnTime)) // Blink off the LEDs 
-   {
-    ledState = 0;  // Set the LEDs status to off
-    previousMillis = currentMillis; // Remember the time
-     if(Face016BlinkCheck == true) // Checking BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    {
-    BlinkFunction("016");
-    }
-    else
-    {
-    Face016BlinkCheck= true; // Setting BlinkCheck to allow blinking
-    Serial.println("Blink Resumed"); // Debug output
-   } 
-   } 
+  lefteye.clear();
+  righteye.clear();
+  maskedColorWipeLeftEye(color, face016_Left);
+  maskedColorWipeRightEye(color, face016_Right);
 }
 // Draw Face017
 void Face017()
 {
-  if (Face017RunningCheck == false) // Check to see if this face is currently running or was recently started - this was added to prevent double blinking when switching faces
-  {
-    Serial.println("Blink Paused");
-    maskedColorWipeLeftEye(color, face017_Left);
-    maskedColorWipeRightEye(color, face017_Right);
-    // Setting FaceRunningCheck variables for smoother changes
-    FaceRunningCheckClearFunction();
-    Face017RunningCheck = true;
-    // Clearing BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    Face017BlinkCheck = false;
-  }
-  currentMillis = millis(); // Set variable to see if it's time to change the state of the LEDs
-  if ((ledState == 0) && (currentMillis - previousMillis >= OffTime)) // Turn on the LEDs 
-  {
-    ledState = 1;  // Set the LEDs status to on
-    previousMillis = currentMillis; // Remember the time
-    Serial.println("Face017 LEDs ON"); // Debug output
-    maskedColorWipeLeftEye(color, face017_Left);
-    maskedColorWipeRightEye(color, face017_Right);
-    }
-    else if((ledState == 1) && (currentMillis - previousMillis >= OnTime)) // Blink off the LEDs 
-   {
-    ledState = 0;  // Set the LEDs status to off
-    previousMillis = currentMillis; // Remember the time
-     if(Face017BlinkCheck == true) // Checking BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    {
-    BlinkFunction("017");
-    }
-    else
-    {
-    Face017BlinkCheck= true; // Setting BlinkCheck to allow blinking
-    Serial.println("Blink Resumed"); // Debug output
-   } 
-   } 
+  lefteye.clear();
+  righteye.clear();
+  maskedColorWipeLeftEye(color, face017_Left);
+  maskedColorWipeRightEye(color, face017_Right);
 }
 // Draw Face018
 void Face018()
 {
-  if (Face018RunningCheck == false) // Check to see if this face is currently running or was recently started - this was added to prevent double blinking when switching faces
-  {
-    Serial.println("Blink Paused");
-    maskedColorWipeLeftEye(color, face018_Left);
-    maskedColorWipeRightEye(color, face018_Right);
-    // Setting FaceRunningCheck variables for smoother changes
-    FaceRunningCheckClearFunction();
-    Face018RunningCheck = true;
-    // Clearing BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    Face018BlinkCheck = false;
-  }
-  currentMillis = millis(); // Set variable to see if it's time to change the state of the LEDs
-  if ((ledState == 0) && (currentMillis - previousMillis >= OffTime)) // Turn on the LEDs 
-  {
-    ledState = 1;  // Set the LEDs status to on
-    previousMillis = currentMillis; // Remember the time
-    Serial.println("Face018 LEDs ON"); // Debug output
-    maskedColorWipeLeftEye(color, face018_Left);
-    maskedColorWipeRightEye(color, face018_Right);
-    }
-    else if((ledState == 1) && (currentMillis - previousMillis >= OnTime)) // Blink off the LEDs 
-   {
-    ledState = 0;  // Set the LEDs status to off
-    previousMillis = currentMillis; // Remember the time
-     if(Face018BlinkCheck == true) // Checking BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    {
-    BlinkFunction("018");
-    }
-    else
-    {
-    Face018BlinkCheck= true; // Setting BlinkCheck to allow blinking
-    Serial.println("Blink Resumed"); // Debug output
-   } 
-   } 
+  lefteye.clear();
+  righteye.clear();
+  maskedColorWipeLeftEye(color, face018_Left);
+  maskedColorWipeRightEye(color, face018_Right);
 }
 void Face019()
 {
-  if (Face019RunningCheck == false) // Check to see if this face is currently running or was recently started - this was added to prevent double blinking when switching faces
-  {
-    Serial.println("Blink Paused");
-    maskedColorWipeLeftEye(color, face019_Left);
-    maskedColorWipeRightEye(color, face019_Right);
-    FaceRunningCheckClearFunction();
-    Face019RunningCheck = true;
-    // Clearing BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    Face019BlinkCheck = false;
-  }
-  currentMillis = millis(); // Set variable to see if it's time to change the state of the LEDs
-  if ((ledState == 0) && (currentMillis - previousMillis >= OffTime)) // Turn on the LEDs 
-  {
-    ledState = 1;  // Set the LEDs status to on
-    previousMillis = currentMillis; // Remember the time
-    Serial.println("Face019 LEDs ON"); // Debug output
-    maskedColorWipeLeftEye(color, face019_Left);
-    maskedColorWipeRightEye(color, face019_Right);
-    }
-    else if((ledState == 1) && (currentMillis - previousMillis >= OnTime)) // Blink off the LEDs 
-   {
-    ledState = 0;  // Set the LEDs status to off
-    previousMillis = currentMillis; // Remember the time
-     if(Face019BlinkCheck == true) // Checking BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    {
-    BlinkFunction("019");
-    }
-    else
-    {
-    Face019BlinkCheck= true; // Setting BlinkCheck to allow blinking
-    Serial.println("Blink Resumed"); // Debug output
-   } 
-   } 
+  lefteye.clear();
+  righteye.clear();
+  maskedColorWipeLeftEye(color, face019_Left);
+  maskedColorWipeRightEye(color, face019_Right);
 }
 // Draw Face020
 void Face020()
 {
-  if (Face020RunningCheck == false) // Check to see if this face is currently running or was recently started - this was added to prevent double blinking when switching faces
-  {
-    Serial.println("Blink Paused");
-    maskedColorWipeLeftEye(color, face020_Left);
-    maskedColorWipeRightEye(color, face020_Right);
-    FaceRunningCheckClearFunction();
-    Face020RunningCheck = true;
-    // Clearing BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    Face020BlinkCheck = false;
-  }
-  currentMillis = millis(); // Set variable to see if it's time to change the state of the LEDs
-  if ((ledState == 0) && (currentMillis - previousMillis >= OffTime)) // Turn on the LEDs 
-  {
-    ledState = 1;  // Set the LEDs status to on
-    previousMillis = currentMillis; // Remember the time
-    Serial.println("Face020 LEDs ON"); // Debug output
-    maskedColorWipeLeftEye(color, face020_Left);
-    maskedColorWipeRightEye(color, face020_Right);
-    }
-    else if((ledState == 1) && (currentMillis - previousMillis >= OnTime)) // Blink off the LEDs 
-   {
-    ledState = 0;  // Set the LEDs status to off
-    previousMillis = currentMillis; // Remember the time
-     if(Face020BlinkCheck == true) // Checking BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    {
-    BlinkFunction("020");
-    }
-    else
-    {
-    Face020BlinkCheck= true; // Setting BlinkCheck to allow blinking
-    Serial.println("Blink Resumed"); // Debug output
-   } 
-   } 
+  lefteye.clear();
+  righteye.clear();
+  maskedColorWipeLeftEye(color, face020_Left);
+  maskedColorWipeRightEye(color, face020_Right);
 }
 // Draw Face021
 void Face021()
 {
-  if (Face021RunningCheck == false) // Check to see if this face is currently running or was recently started - this was added to prevent double blinking when switching faces
-  {
-    Serial.println("Blink Paused");
-    maskedColorWipeLeftEye(color, face021_Left);
-    maskedColorWipeRightEye(color, face021_Right);
-    FaceRunningCheckClearFunction();
-    Face021RunningCheck = true;
-    // Clearing BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    Face021BlinkCheck = false;
-  }
-  currentMillis = millis(); // Set variable to see if it's time to change the state of the LEDs
-  if ((ledState == 0) && (currentMillis - previousMillis >= OffTime)) // Turn on the LEDs 
-  {
-    ledState = 1;  // Set the LEDs status to on
-    previousMillis = currentMillis; // Remember the time
-    Serial.println("Face021 LEDs ON"); // Debug output
-    maskedColorWipeLeftEye(color, face021_Left);
-    maskedColorWipeRightEye(color, face021_Right);
-    }
-    else if((ledState == 1) && (currentMillis - previousMillis >= OnTime)) // Blink off the LEDs 
-   {
-    ledState = 0;  // Set the LEDs status to off
-    previousMillis = currentMillis; // Remember the time
-     if(Face021BlinkCheck == true) // Checking BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    {
-    BlinkFunction("021");
-    }
-    else
-    {
-    Face021BlinkCheck= true; // Setting BlinkCheck to allow blinking
-    Serial.println("Blink Resumed"); // Debug output
-   } 
-   } 
+  lefteye.clear();
+  righteye.clear();
+  maskedColorWipeLeftEye(color, face021_Left);
+  maskedColorWipeRightEye(color, face021_Right);
 }
 // Draw Face022
 void Face022()
 {
-  if (Face022RunningCheck == false) // Check to see if this face is currently running or was recently started - this was added to prevent double blinking when switching faces
-  {
-    Serial.println("Blink Paused");
-    maskedColorWipeLeftEye(color, face022_Left);
-    maskedColorWipeRightEye(color, face022_Right);
-    FaceRunningCheckClearFunction();
-    Face022RunningCheck = true;
-    // Clearing BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    Face022BlinkCheck = false;
-  }
-  currentMillis = millis(); // Set variable to see if it's time to change the state of the LEDs
-  if ((ledState == 0) && (currentMillis - previousMillis >= OffTime)) // Turn on the LEDs 
-  {
-    ledState = 1;  // Set the LEDs status to on
-    previousMillis = currentMillis; // Remember the time
-    Serial.println("Face022 LEDs ON"); // Debug output
-    maskedColorWipeLeftEye(color, face022_Left);
-    maskedColorWipeRightEye(color, face022_Right);
-    }
-    else if((ledState == 1) && (currentMillis - previousMillis >= OnTime)) // Blink off the LEDs 
-   {
-    ledState = 0;  // Set the LEDs status to off
-    previousMillis = currentMillis; // Remember the time
-     if(Face022BlinkCheck == true) // Checking BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    {
-    BlinkFunction("022");
-    }
-    else
-    {
-    Face022BlinkCheck= true; // Setting BlinkCheck to allow blinking
-    Serial.println("Blink Resumed"); // Debug output
-   } 
-   } 
+  lefteye.clear();
+  righteye.clear();
+  maskedColorWipeLeftEye(color, face022_Left);
+  maskedColorWipeRightEye(color, face022_Right);
 }
 // Draw Face023
 void Face023()
 {
-  if (Face023RunningCheck == false) // Check to see if this face is currently running or was recently started - this was added to prevent double blinking when switching faces
-  {
-    Serial.println("Blink Paused");
-    maskedColorWipeLeftEye(color, face023_Left);
-    maskedColorWipeRightEye(color, face023_Right);
-    FaceRunningCheckClearFunction();
-    Face023RunningCheck = true;
-    // Clearing BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    Face023BlinkCheck = false;
-  }
-  currentMillis = millis(); // Set variable to see if it's time to change the state of the LEDs
-  if ((ledState == 0) && (currentMillis - previousMillis >= OffTime)) // Turn on the LEDs 
-  {
-    ledState = 1;  // Set the LEDs status to on
-    previousMillis = currentMillis; // Remember the time
-    Serial.println("Face023 LEDs ON"); // Debug output
-    maskedColorWipeLeftEye(color, face023_Left);
-    maskedColorWipeRightEye(color, face023_Right);
-    }
-    else if((ledState == 1) && (currentMillis - previousMillis >= OnTime)) // Blink off the LEDs 
-   {
-    ledState = 0;  // Set the LEDs status to off
-    previousMillis = currentMillis; // Remember the time
-     if(Face023BlinkCheck == true) // Checking BlinkCheck for this face to false to prevent an intermittent double flash when changing faces
-    {
-    BlinkFunction("023");
-    }
-    else
-    {
-    Face023BlinkCheck= true; // Setting BlinkCheck to allow blinking
-    Serial.println("Blink Resumed"); // Debug output
-   } 
-   } 
+  lefteye.clear();
+  righteye.clear();
+  maskedColorWipeLeftEye(color, face023_Left);
+  maskedColorWipeRightEye(color, face023_Right);
 }
 
 // Umbrella Logo
 void Umbrella()
 {
   DrawUmbrella();
-}
-
-void FaceRunningCheckClearFunction()
-{
-  Face001RunningCheck = false; // Face001
-  Face002RunningCheck = false; // Face002
-  Face003RunningCheck = false; // Face003
-  Face004RunningCheck = false; // Face004
-  Face005RunningCheck = false; // Face005
-  Face006RunningCheck = false; // Face006 
-  Face007RunningCheck = false; // Face007
-  Face008RunningCheck = false; // Face008
-  Face009RunningCheck = false; // Face009
-  Face010RunningCheck = false; // Face010
-  Face011RunningCheck = false; // Face011
-  Face012RunningCheck = false; // Face012
-  Face013RunningCheck = false; // Face013
-  Face014RunningCheck = false; // Face014
-  Face015RunningCheck = false; // Face015
-  Face016RunningCheck = false; // Face016
-  Face017RunningCheck = false; // Face017
-  Face018RunningCheck = false; // Face018
-  Face019RunningCheck = false; // Face019
-  Face020RunningCheck = false; // Face020
-  Face021RunningCheck = false; // Face021
-  Face022RunningCheck = false; // Face022
-  Face023RunningCheck = false; // Face023
-  Face024RunningCheck = false; // Face024 
 }
 
 void IncrementBrightness()
@@ -2269,20 +1487,31 @@ void dualMaskedColorWipeRightEye(uint32_t color, uint32_t color2, byte mask[][RO
   delay(1);
 }
 
-void BlinkFunction(String FaceVariable)
+void BlinkFunction()
 {
-    Serial.print("Face");
-    Serial.print(FaceVariable);
-    Serial.println(" LEDs OFF - Blink Function"); // Debug output
-    lefteye.setBrightness(0);
-    righteye.setBrightness(0);
-    lefteye.show(); 
-    righteye.show();
-    delay(10);
+  currentMillis = millis(); // Set variable to see if it's time to change the state of the LEDs
+  if ((ledState == 0) && (currentMillis - previousMillis >= OffTime)) // Turn on the LEDs 
+  {
+    ledState = 1; // Set the LEDs status to on
+    previousMillis = currentMillis;   // Remember the time
+    Serial.println("Blink - LEDs ON"); // Debug output
     lefteye.setBrightness(EyeBrightness);
     righteye.setBrightness(EyeBrightness);
     lefteye.show(); 
     righteye.show();
+  }
+  else if((ledState == 1) && (currentMillis - previousMillis >= OnTime)) // Blink off the LEDs 
+  {
+    ledState = 0; // Set the LEDs status to off
+    previousMillis = currentMillis; // Remember the time
+    Serial.println("Blink - LEDs OFF");
+    lefteye.setBrightness(0);
+    righteye.setBrightness(0);
+    lefteye.show(); 
+    righteye.show();
+    
+  }
+  delay(10);
 }
 
 void setFaceColor(uint32_t colorVariable)
@@ -2292,14 +1521,8 @@ void setFaceColor(uint32_t colorVariable)
 
 void DrawUmbrella()
 {
-  if (Face024RunningCheck == false) // Check to see if this face is currently running or was recently started - this was added to prevent double blinking when switching faces
-  {
-    lefteye.clear();
-    righteye.clear();
-    FaceRunningCheckClearFunction();
-    Face024RunningCheck = true;
-    dualMaskedColorWipeLeftEye(colorRed, colorWhite, face024_Red, face024_White);
-    dualMaskedColorWipeRightEye(colorRed, colorWhite, face024_Red, face024_White);
-  }
-  delay(10);  
+  lefteye.clear();
+  righteye.clear();
+  dualMaskedColorWipeLeftEye(colorRed, colorWhite, face024_Red, face024_White);
+  dualMaskedColorWipeRightEye(colorRed, colorWhite, face024_Red, face024_White); 
 }
