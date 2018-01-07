@@ -92,7 +92,7 @@ void setup()
   startAdv();
 
   // Draw Initial Face Pattern
-  face001();
+  drawFace(face001_Left, face001_Right);
 }
 
 void startAdv(void)
@@ -121,30 +121,30 @@ void loop()
    {
     case 0x2B: incrementBrightness(); break;
     case 0x2D: decrementBrightness(); break;
-    case 0x30: face010(); break; // Draw Face010
-    case 0x31: face001(); break; // Draw Face001
-    case 0x32: face002(); break; // Draw Face002
-    case 0x33: face003(); break; // Draw Face003
-    case 0x34: face004(); break; // Draw Face004
-    case 0x35: face005(); break; // Draw Face005
-    case 0x36: face006(); break; // Draw Face006
-    case 0x37: face007(); break; // Draw Face007
-    case 0x38: face008(); break; // Draw Face008
-    case 0x39: face009(); break; // Draw Face009
-    case 0x41: face011(); break; // Draw Face011
-    case 0x42: face012(); break; // Draw Face012
-    case 0x43: face013(); break; // Draw Face013
-    case 0x44: face014(); break; // Draw Face014
-    case 0x45: face015(); break; // Draw Face015
-    case 0x46: face016(); break; // Draw Face016
-    case 0x47: face017(); break; // Draw Face017
-    case 0x48: face018(); break; // Draw Face018
-    case 0x49: face019(); break; // Draw Face019
-    case 0x4A: face020(); break; // Draw Face020
-    case 0x4B: face021(); break; // Draw Face021
-    case 0x4C: face022(); break; // Draw Face022
-    case 0x4D: face023(); break; // Draw Face023
-    case 0x4E: umbrella(); break; // Draw Umbrella Corp logo
+    case 0x30: drawFace(face010_Left, face010_Right); break; // Draw Face010
+    case 0x31: drawFace(face001_Left, face001_Right); break; // Draw Face001
+    case 0x32: drawFace(face002_Left, face002_Right); break; // Draw Face002
+    case 0x33: drawFace(face003_Left, face003_Right); break; // Draw Face003
+    case 0x34: drawFace(face004_Left, face004_Right); break; // Draw Face004
+    case 0x35: drawFace(face005_Left, face005_Right); break; // Draw Face005
+    case 0x36: drawFace(face006_Left, face006_Right); break; // Draw Face006
+    case 0x37: drawFace(face007_Left, face007_Right); break; // Draw Face007
+    case 0x38: drawFace(face008_Left, face008_Right); break; // Draw Face008
+    case 0x39: drawFace(face009_Left, face009_Right); break; // Draw Face009
+    case 0x41: drawFace(face011_Left, face011_Right); break; // Draw Face011
+    case 0x42: drawFace(face012_Left, face012_Right); break; // Draw Face012
+    case 0x43: drawFace(face013_Left, face013_Right); break; // Draw Face013
+    case 0x44: drawFace(face014_Left, face014_Right); break; // Draw Face014
+    case 0x45: drawFace(face015_Left, face015_Right);break; // Draw Face015
+    case 0x46: drawFace(face016_Left, face016_Right); break; // Draw Face016
+    case 0x47: drawFace(face017_Left, face017_Right); break; // Draw Face017
+    case 0x48: drawFace(face018_Left, face018_Right); break; // Draw Face018
+    case 0x49: drawFace(face019_Left, face019_Right); break; // Draw Face019
+    case 0x4A: drawFace(face020_Left, face020_Right); break; // Draw Face020
+    case 0x4B: drawFace(face021_Left, face021_Right); break; // Draw Face021
+    case 0x4C: drawFace(face022_Left, face022_Right); break; // Draw Face022
+    case 0x4D: drawFace(colorRed, colorWhite, face023_Red, face023_White); break; // Draw Face023
+    case 0x4E: drawFace(colorRed, colorWhite, face024_Red, face024_White); break; // Draw Umbrella Corp logo
     case 0x57: setFaceColor(colorRed); break;
     case 0x58: setFaceColor(colorGreen); break;
     case 0x59: setFaceColor(colorBlue); break;
@@ -176,196 +176,16 @@ void rtos_idle_callback(void)
   waitForEvent();
 }
 
-void face001()
+void drawFace(byte leftEye[][ROW_SIZE], byte rightEye[][ROW_SIZE])
 {
-  lefteye.clear();
-  righteye.clear();
-  maskedColorWipeLeftEye(color, face001_Left);
-  maskedColorWipeRightEye(color, face001_Right);
-}
-// Draw Face002
-void face002()
-{
-  lefteye.clear();
-  righteye.clear();
-  maskedColorWipeLeftEye(color, face002_Left);
-  maskedColorWipeRightEye(color, face002_Right);
-}
-// Draw Face003
-void face003()
-{
-  lefteye.clear();
-  righteye.clear();
-  maskedColorWipeLeftEye(color, face003_Left);
-  maskedColorWipeRightEye(color, face003_Right);
-}   
-// Draw Face004
-void face004()
-{
-  lefteye.clear();
-  righteye.clear();
-  maskedColorWipeLeftEye(color, face004_Left);
-  maskedColorWipeRightEye(color, face004_Right);
-}
-// Draw Face005
-void face005()
-{
-  lefteye.clear();
-  righteye.clear();
-  maskedColorWipeLeftEye(color, face005_Left);
-  maskedColorWipeRightEye(color, face005_Right);
-}
-// Draw Face006
-void face006()
-{
-  lefteye.clear();
-  righteye.clear();
-  maskedColorWipeLeftEye(color, face006_Left);
-  maskedColorWipeRightEye(color, face006_Right);
-}
-// Draw Face007
-void face007()
-{
-  lefteye.clear();
-  righteye.clear();
-  maskedColorWipeLeftEye(color, face007_Left);
-  maskedColorWipeRightEye(color, face007_Right);
-}
-// Draw Face008
-void face008()
-{
-  lefteye.clear();
-  righteye.clear();
-  maskedColorWipeLeftEye(color, face008_Left);
-  maskedColorWipeRightEye(color, face008_Right);
-}
-// Draw Face009
-void face009()
-{
-  lefteye.clear();
-  righteye.clear();
-  maskedColorWipeLeftEye(color, face009_Left);
-  maskedColorWipeRightEye(color, face009_Right);
-}
-// Draw Face010
-void face010()
-{
-  lefteye.clear();
-  righteye.clear();
-  maskedColorWipeLeftEye(color, face010_Left);
-  maskedColorWipeRightEye(color, face010_Right);
-}
-// Draw Face011
-void face011()
-{
-  lefteye.clear();
-  righteye.clear();
-  maskedColorWipeLeftEye(color, face011_Left);
-  maskedColorWipeRightEye(color, face011_Right);
-}
-// Draw Face012
-void face012()
-{
-  lefteye.clear();
-  righteye.clear();
-  maskedColorWipeLeftEye(color, face012_Left);
-  maskedColorWipeRightEye(color, face012_Right);
-}
-// Draw Face013
-void face013()
-{
-  lefteye.clear();
-  righteye.clear();
-  maskedColorWipeLeftEye(color, face013_Left);
-  maskedColorWipeRightEye(color, face013_Right);
-}
-// Draw Face014
-void face014()
-{
-  lefteye.clear();
-  righteye.clear();
-  maskedColorWipeLeftEye(color, face014_Left);
-  maskedColorWipeRightEye(color, face014_Right);
-}
-// Draw Face015
-void face015()
-{
-  lefteye.clear();
-  righteye.clear();
-  maskedColorWipeLeftEye(color, face015_Left);
-  maskedColorWipeRightEye(color, face015_Right);
-}
-// Draw Face016
-void face016()
-{
-  lefteye.clear();
-  righteye.clear();
-  maskedColorWipeLeftEye(color, face016_Left);
-  maskedColorWipeRightEye(color, face016_Right);
-}
-// Draw Face017
-void face017()
-{
-  lefteye.clear();
-  righteye.clear();
-  maskedColorWipeLeftEye(color, face017_Left);
-  maskedColorWipeRightEye(color, face017_Right);
-}
-// Draw Face018
-void face018()
-{
-  lefteye.clear();
-  righteye.clear();
-  maskedColorWipeLeftEye(color, face018_Left);
-  maskedColorWipeRightEye(color, face018_Right);
-}
-void face019()
-{
-  lefteye.clear();
-  righteye.clear();
-  maskedColorWipeLeftEye(color, face019_Left);
-  maskedColorWipeRightEye(color, face019_Right);
-}
-// Draw Face020
-void face020()
-{
-  lefteye.clear();
-  righteye.clear();
-  maskedColorWipeLeftEye(color, face020_Left);
-  maskedColorWipeRightEye(color, face020_Right);
-}
-// Draw Face021
-void face021()
-{
-  lefteye.clear();
-  righteye.clear();
-  maskedColorWipeLeftEye(color, face021_Left);
-  maskedColorWipeRightEye(color, face021_Right);
-}
-// Draw Face022
-void face022()
-{
-  lefteye.clear();
-  righteye.clear();
-  maskedColorWipeLeftEye(color, face022_Left);
-  maskedColorWipeRightEye(color, face022_Right);
-}
-// Draw Face023
-void face023()
-{
-  lefteye.clear();
-  righteye.clear();
-  dualMaskedColorWipeLeftEye(colorRed, colorWhite, face023_Red, face023_White);
-  dualMaskedColorWipeRightEye(colorRed, colorWhite, face023_Red, face023_White); 
+maskedColorWipeEye("leftEye", color, leftEye);
+maskedColorWipeEye("rightEye", color, rightEye);
 }
 
-// Umbrella Logo
-void umbrella()
+void drawFace(uint32_t color, uint32_t color2, byte mask[][ROW_SIZE], byte mask2[][ROW_SIZE])
 {
-  lefteye.clear();
-  righteye.clear();
-  dualMaskedColorWipeLeftEye(colorRed, colorWhite, face024_Red, face024_White);
-  dualMaskedColorWipeRightEye(colorRed, colorWhite, face024_Red, face024_White); 
+dualMaskedColorWipeEye("leftEye", color, color2, mask, mask2);
+dualMaskedColorWipeEye("rightEye", color, color2, mask, mask2);
 }
 
 void incrementBrightness()
@@ -402,77 +222,66 @@ void decrementBrightness()
   }  
 }
 
-void maskedColorWipeLeftEye(uint32_t color, byte mask[][ROW_SIZE])
+void maskedColorWipeEye(String eye, uint32_t color, byte mask[][ROW_SIZE])
 {
   uint16_t i, j;
- 
-  for(i=0; i<256; i++) {
-    if (drawGivenMask(i / ROW_SIZE, i % ROW_SIZE, mask)){
-      lefteye.setPixelColor(i, color);
+  if(eye == "leftEye"){
+    for(i=0; i<256; i++) {
+      if (drawGivenMask(i / ROW_SIZE, i % ROW_SIZE, mask)){
+        lefteye.setPixelColor(i, color);
+      }
+      else{
+        lefteye.setPixelColor(i, 0);
+      }
     }
+    lefteye.show();
+  }
+  else if(eye == "rightEye"){
+    for(i=0; i<256; i++) {
+      if (drawGivenMask(i / ROW_SIZE, i % ROW_SIZE, mask)){
+        righteye.setPixelColor(i, color);
+      }
+      else{
+        righteye.setPixelColor(i, 0);
+      }
+    }
+    righteye.show();
+  }
+  delay(1);
+}
+
+void dualMaskedColorWipeEye(String eye, uint32_t color, uint32_t color2, byte mask[][ROW_SIZE], byte mask2[][ROW_SIZE])
+{
+  uint16_t i, j;
+  if(eye == "leftEye"){
+    for(i=0; i<256; i++) {
+      if (drawGivenMask(i / ROW_SIZE, i % ROW_SIZE, mask)){
+        lefteye.setPixelColor(i, color);
+      }
+      else if(drawGivenMask(i / ROW_SIZE, i % ROW_SIZE, mask2)){
+        lefteye.setPixelColor(i, color2);
+      }
     else{
       lefteye.setPixelColor(i, 0);
     }
-  }
-   
-  lefteye.show();
-  delay(1);
-}
-
-void maskedColorWipeRightEye(uint32_t color, byte mask[][ROW_SIZE])
-{
-  uint16_t i, j;
- 
-  for(i=0; i<256; i++) {
-    if (drawGivenMask(i / ROW_SIZE, i % ROW_SIZE, mask)){
-      righteye.setPixelColor(i, color);
     }
+    lefteye.show();
+  }
+  else if(eye == "rightEye"){
+    for(i=0; i<256; i++) {
+      if (drawGivenMask(i / ROW_SIZE, i % ROW_SIZE, mask)){
+        righteye.setPixelColor(i, color);
+      }
+      else if(drawGivenMask(i / ROW_SIZE, i % ROW_SIZE, mask2)){
+        righteye.setPixelColor(i, color2);
+      }
     else{
       righteye.setPixelColor(i, 0);
     }
+    }
+    righteye.show();
   }
-   
-  righteye.show();
-  delay(1);
-}
 
-void dualMaskedColorWipeLeftEye(uint32_t color, uint32_t color2, byte mask[][ROW_SIZE], byte mask2[][ROW_SIZE])
-{
-  uint16_t i, j;
- 
-  for(i=0; i<256; i++) {
-    if (drawGivenMask(i / ROW_SIZE, i % ROW_SIZE, mask)){
-      lefteye.setPixelColor(i, color);
-    }
-    else if(drawGivenMask(i / ROW_SIZE, i % ROW_SIZE, mask2)){
-      lefteye.setPixelColor(i, color2);
-    }
-    else{
-      lefteye.setPixelColor(i, 0);
-    }
-  }
-   
-  lefteye.show();
-  delay(1);
-}
-
-void dualMaskedColorWipeRightEye(uint32_t color, uint32_t color2, byte mask[][ROW_SIZE], byte mask2[][ROW_SIZE])
-{
-  uint16_t i, j;
- 
-  for(i=0; i<256; i++) {
-    if (drawGivenMask(i / ROW_SIZE, i % ROW_SIZE, mask)){
-      righteye.setPixelColor(i, color);
-    }
-    else if(drawGivenMask(i / ROW_SIZE, i % ROW_SIZE, mask2)){
-      righteye.setPixelColor(i, color2);
-    }
-    else{
-      righteye.setPixelColor(i, 0);
-    }
-  }
-   
-  righteye.show();
   delay(1);
 }
 
