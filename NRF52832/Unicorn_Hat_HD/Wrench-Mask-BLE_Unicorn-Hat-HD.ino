@@ -263,7 +263,7 @@ void dualMaskedColorWipeEye(String eye, uint32_t color, uint32_t color2, byte ma
       }
     else{
       lefteye.setPixelColor(i, 0);
-    }
+      }
     }
     lefteye.show();
   }
@@ -277,7 +277,7 @@ void dualMaskedColorWipeEye(String eye, uint32_t color, uint32_t color2, byte ma
       }
     else{
       righteye.setPixelColor(i, 0);
-    }
+      }
     }
     righteye.show();
   }
