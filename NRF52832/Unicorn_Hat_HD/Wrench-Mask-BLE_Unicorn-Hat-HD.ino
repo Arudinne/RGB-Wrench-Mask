@@ -92,7 +92,7 @@ void setup()
   startAdv();
 
   // Draw Initial Face Pattern
-  drawFace(face001_Left, face001_Right);
+  drawFace(colorWhite, face001_Left, face001_Right);
 }
 
 void startAdv(void)
@@ -121,28 +121,28 @@ void loop()
    {
     case 0x2B: incrementBrightness(); break;
     case 0x2D: decrementBrightness(); break;
-    case 0x30: drawFace(face010_Left, face010_Right); break; // Draw Face010
-    case 0x31: drawFace(face001_Left, face001_Right); break; // Draw Face001
-    case 0x32: drawFace(face002_Left, face002_Right); break; // Draw Face002
-    case 0x33: drawFace(face003_Left, face003_Right); break; // Draw Face003
-    case 0x34: drawFace(face004_Left, face004_Right); break; // Draw Face004
-    case 0x35: drawFace(face005_Left, face005_Right); break; // Draw Face005
-    case 0x36: drawFace(face006_Left, face006_Right); break; // Draw Face006
-    case 0x37: drawFace(face007_Left, face007_Right); break; // Draw Face007
-    case 0x38: drawFace(face008_Left, face008_Right); break; // Draw Face008
-    case 0x39: drawFace(face009_Left, face009_Right); break; // Draw Face009
-    case 0x41: drawFace(face011_Left, face011_Right); break; // Draw Face011
-    case 0x42: drawFace(face012_Left, face012_Right); break; // Draw Face012
-    case 0x43: drawFace(face013_Left, face013_Right); break; // Draw Face013
-    case 0x44: drawFace(face014_Left, face014_Right); break; // Draw Face014
-    case 0x45: drawFace(face015_Left, face015_Right);break; // Draw Face015
-    case 0x46: drawFace(face016_Left, face016_Right); break; // Draw Face016
-    case 0x47: drawFace(face017_Left, face017_Right); break; // Draw Face017
-    case 0x48: drawFace(face018_Left, face018_Right); break; // Draw Face018
-    case 0x49: drawFace(face019_Left, face019_Right); break; // Draw Face019
-    case 0x4A: drawFace(face020_Left, face020_Right); break; // Draw Face020
-    case 0x4B: drawFace(face021_Left, face021_Right); break; // Draw Face021
-    case 0x4C: drawFace(face022_Left, face022_Right); break; // Draw Face022
+    case 0x30: drawFace(color, face010_Left, face010_Right); break; // Draw Face010
+    case 0x31: drawFace(color, face001_Left, face001_Right); break; // Draw Face001
+    case 0x32: drawFace(color, face002_Left, face002_Right); break; // Draw Face002
+    case 0x33: drawFace(color, face003_Left, face003_Right); break; // Draw Face003
+    case 0x34: drawFace(color, face004_Left, face004_Right); break; // Draw Face004
+    case 0x35: drawFace(color, face005_Left, face005_Right); break; // Draw Face005
+    case 0x36: drawFace(color, face006_Left, face006_Right); break; // Draw Face006
+    case 0x37: drawFace(color, face007_Left, face007_Right); break; // Draw Face007
+    case 0x38: drawFace(color, face008_Left, face008_Right); break; // Draw Face008
+    case 0x39: drawFace(color, face009_Left, face009_Right); break; // Draw Face009
+    case 0x41: drawFace(color, face011_Left, face011_Right); break; // Draw Face011
+    case 0x42: drawFace(color, face012_Left, face012_Right); break; // Draw Face012
+    case 0x43: drawFace(color, face013_Left, face013_Right); break; // Draw Face013
+    case 0x44: drawFace(color, face014_Left, face014_Right); break; // Draw Face014
+    case 0x45: drawFace(color, face015_Left, face015_Right);break; // Draw Face015
+    case 0x46: drawFace(color, face016_Left, face016_Right); break; // Draw Face016
+    case 0x47: drawFace(color, face017_Left, face017_Right); break; // Draw Face017
+    case 0x48: drawFace(color, face018_Left, face018_Right); break; // Draw Face018
+    case 0x49: drawFace(color, face019_Left, face019_Right); break; // Draw Face019
+    case 0x4A: drawFace(color, face020_Left, face020_Right); break; // Draw Face020
+    case 0x4B: drawFace(color, face021_Left, face021_Right); break; // Draw Face021
+    case 0x4C: drawFace(color, face022_Left, face022_Right); break; // Draw Face022
     case 0x4D: drawFace(colorRed, colorWhite, face023_Red, face023_White); break; // Draw Face023
     case 0x4E: drawFace(colorRed, colorWhite, face024_Red, face024_White); break; // Draw Umbrella Corp logo
     case 0x57: setFaceColor(colorRed); break;
@@ -176,7 +176,7 @@ void rtos_idle_callback(void)
   waitForEvent();
 }
 
-void drawFace(byte leftEye[][ROW_SIZE], byte rightEye[][ROW_SIZE])
+void drawFace(uint32_t color, byte leftEye[][ROW_SIZE], byte rightEye[][ROW_SIZE])
 {
 maskedColorWipeEye("leftEye", color, leftEye);
 maskedColorWipeEye("rightEye", color, rightEye);
