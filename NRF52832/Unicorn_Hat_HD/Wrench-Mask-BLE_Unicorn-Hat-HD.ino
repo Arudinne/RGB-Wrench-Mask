@@ -29,8 +29,8 @@ const int matrixAChipSelectPin = 7;
 const int matrixBChipSelectPin = 27;
 
 // Define the matrices
-Unicorn_Hat_HD lefteye = Unicorn_Hat_HD(matrixAChipSelectPin);
-Unicorn_Hat_HD righteye = Unicorn_Hat_HD(matrixBChipSelectPin);
+Unicorn_Hat_HD lefteye = Unicorn_Hat_HD(matrixAChipSelectPin, 90);
+Unicorn_Hat_HD righteye = Unicorn_Hat_HD(matrixBChipSelectPin, 90);
 
 // Define preset color variables
 uint32_t colorRed = 0xFF0000;
