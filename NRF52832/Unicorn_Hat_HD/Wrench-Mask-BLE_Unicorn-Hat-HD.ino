@@ -135,7 +135,7 @@ void loop()
     case 0x42: drawFace(color, face012_Left, face012_Right); break; // Draw Face012
     case 0x43: drawFace(color, face013_Left, face013_Right); break; // Draw Face013
     case 0x44: drawFace(color, face014_Left, face014_Right); break; // Draw Face014
-    case 0x45: drawFace(color, face015_Left, face015_Right);break; // Draw Face015
+    case 0x45: drawFace(color, face015_Left, face015_Right); break; // Draw Face015
     case 0x46: drawFace(color, face016_Left, face016_Right); break; // Draw Face016
     case 0x47: drawFace(color, face017_Left, face017_Right); break; // Draw Face017
     case 0x48: drawFace(color, face018_Left, face018_Right); break; // Draw Face018
